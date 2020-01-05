@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add_student</title>
+</head>
+<body>
+    <h1>Add Student</h1>
+    <form method="POST" action="/add_student/">
+        <p>Student name: <input type="text" name="name"></p>
+        <p>
+            Class
+            <select name="class_id" id="">
+                {% for row in class_list %}
+                    <option value="{{ row.id }}">{{ row.title }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>
