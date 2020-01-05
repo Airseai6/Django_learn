@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.shortcuts import HttpResponse, render
+from django.shortcuts import HttpResponse, render, redirect
 
 
 def login(request):
@@ -30,20 +30,47 @@ def login(request):
     # print(request)
     # print(request.method)
     if request.method == "GET":
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'msg':'123'})
     else:
         # the data user submit
         u = request.POST.get('username')
-        p = request.POST.get('pwd')
+        p = request.POST.get('password')
         if u == 'root' and p =='123123':
             # TODO sucess
-            pass
+            # return redirect('http://www.oldboyedu.com')
+            # return render(request, 'index.html')
+            return redirect('/index/')
         else:
             # TODO fail
-            pass
+            return render(request, 'login.html', {'msg':'Failed'})
+
+
+def index(request):
+    # return HttpResponse('index')
+    return render(
+        request,
+        'index.html',
+        {
+            'name':'Alex',
+            'users':['xiaoming','zhanghua'],
+            'user_dict':{'k1':'v1', 'k2':'v2'},
+            'user_dict_list':[
+                {'id':1, 'name':'alex', 'email':'alex@126.com'},
+                {'id':2, 'name':'alex2', 'email':'alex2@126.com'},
+                {'id':3, 'name':'alex3', 'email':'alex3@126.com'},
+            ]
+        }
+    )
+
+
+def delet(request):
+    return HttpResponse(request.method + ' DELET ' + request.GET.get('nid'))
 
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
+    path('', login),
     path('login/', login),
+    path('index/', index),
+    path('del/', delet),
 ]

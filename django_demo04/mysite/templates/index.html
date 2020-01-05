@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+    <h1>模板标记的学习</h1>
+    <p>{{ name }}</p>
+    <p>{{ users }}</p>
+    <p>{{ users.0 }}</p>
+    <p>{{ users.1 }}</p>
+    <br>
+    <p>{{ user_dict.k1 }}</p>
+    <p>{{ user_dict.k2 }}</p>
+    <br>
+    <h3>for list loop</h3>
+    <ul>
+        {% for item in users %}
+            <li>{{ item }}</li>
+        {% endfor%}
+    </ul>
+    <br>
+    <h3>for dic loop</h3>
+        <table border="1">
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>email</td>
+                <td>operate</td>
+
+            </tr>
+            {% for item in user_dict_list %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.email }}</td>
+                <td><a href="">edit</a> | <a href="/delet/?nid={{item.id}}">delet</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+</body>
+</html>

@@ -1,0 +1,17 @@
+2020-1-4
+	老男孩Django视频。12集，day64
+	4. url对应关系
+		/login/		login
+		def login(request):
+			request.method
+			request.POST.get()	-> 请求体
+			request.GET.get()	-> 请求头中的URL中
+
+			return HttpResponse(str)
+			return render(request, 'login.html', {...})	-> need the HTML file
+			return redirect('the address to jump')
+
+2020-1-5
+	5. 模板引擎中的特殊标记
+		login.html
+			{{ name }}
