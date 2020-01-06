@@ -1,5 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .hide{
+        display: none;
+    }
+    .shadow{
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: black;
+        opacity: 0.4;
+        z-index: 999;
+    }
+    .modal{
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        top: 50%;
+        height: 300px;
+        width: 400px;
+        background-color: white;
+        margin-left: -200px;
+        margin-top: -150px;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Students</title>
@@ -10,6 +36,7 @@
         <a href="/classes">ToClasses</a>
         <hr>
         <a href="/add_student">AddStudent</a>
+        <input onclick="showModal()" type="button" value="AddStudent2">
     </div>
     <table>
         <thead>
@@ -36,4 +63,41 @@
         </tbody>
     </table>
 </body>
+
+<div id="shadow" class="shadow hide"></div>
+<div id="modal" class="modal hide">
+    <h3>Add a student</h3>
+    <p>Student Name: <input id="name" type="text"></p>
+    <p>Class: <input id="title" type="text"></p>
+    <input type="button" value="submit" onclick="addAjaxSend()">
+    <input type="button" value="cancel" onclick="cancelModal()">
+</div>
+
+<script src="/static/jquery-3.4.1.js"></script>
+<script>
+    function showModal(){
+        document.getElementById('shadow').classList.remove('hide');
+        document.getElementById('modal').classList.remove('hide');
+    }
+
+    function cancelModal(){
+        document.getElementById('shadow').classList.add('hide');
+        document.getElementById('modal').classList.add('hide');
+    }
+
+    function addAjaxSend(){
+        $.ajax({
+            url: '/modal_add_student/',
+            type: 'POST',
+            data: {'name':$('#name').val(), 'title':$('#title').val(), },
+            success: function(arg){
+                if(arg == 'ok'){
+                    location.reload();
+                }else{
+                    alert(arg);
+                }
+            }
+        })
+    }
+</script>
 </html>

@@ -126,3 +126,14 @@ def modal_edit_class(request):
         ret['message'] = str(e)
 
     return HttpResponse(json.dumps(ret))
+
+
+def modal_add_student(request):
+    name = request.POST.get('name')
+    title = request.POST.get('title')
+    if len(title) > 0 and len(name) > 0:
+        sql = 'insert into student(name, class_id) values(%s, (select class.id from class where class.title=%s));'
+        sqlheper.modify(sql, [name, title, ])
+        return HttpResponse('ok')
+    else:
+        return HttpResponse('ERR：内容不能为空')
