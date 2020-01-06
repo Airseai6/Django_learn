@@ -16,7 +16,7 @@
 	多对多操作
 		- 增删改查
 
-		
+
 2020-1-6
 	内容回顾：
 		1. 创建Django程序
@@ -59,3 +59,74 @@
 		3. Ajax提交页面不刷新
 		4. js实现页面跳转：
 			location.href = “要跳转的地址”
+
+
+内容回顾：
+    1. Web框架本质
+        浏览器（socket客户端）
+            2. 发送IP和端口（默认80）可以带(/index/)字段
+                GET：
+                    请求头
+                        http1.1 /index/
+                        ...
+                    请求体(无内容)
+
+                POST:
+                    请求头
+                        http1.1 /index？p=123
+                        ...
+                    请求体
+                        ...
+            4. 接收响应
+                普通响应：页面直接显示
+                重定向响应：再发起一次http请求
+
+        服务器（socket服务器）
+            1. 启动并监听ip和端口，等待用户连接
+            3. 接收请求进行处理，并返回（本质字符串）
+                普通返回
+                    响应头：
+
+                    响应体：
+                        <html>
+                        ...
+                        </html>
+                重定向返回
+                    响应头：比普通返回的响应头多一个location
+
+    2. DjangoWeb框架
+        1. 创建project
+        2. 配置setting
+            模板，静态文件，csrf
+        3. 路由关系
+            url与视图函数的对应
+        4. 视图函数
+            def index(request):
+                request.method
+                request.GET
+                request.POST
+
+                return HttpResponse("字符串")
+                return redirect('url')
+                return render(request，'模板路径'，{})
+                    # 1. 获取模板+数据，渲染
+                    # 2. HTTPResponse（...）
+        5. 模板渲染
+            {{ k1 }}
+            {{ k2.0 }}
+            {% for i in result %}
+                {{ i }}
+            {% endfor %}
+
+            {% if %}
+            {% endif %}
+
+    3. Ajax( 基于jQuery )
+        $.ajax({
+            url: '',
+            type: '',
+            data: {},
+            success:function(arg){
+
+            }
+        })
