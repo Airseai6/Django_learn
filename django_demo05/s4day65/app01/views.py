@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from utils import sqlheper
+import json
 
 
 def classes(request):
@@ -113,3 +114,15 @@ def modal_add_class(request):
         return HttpResponse('ERR：内容不能为空')
 
 
+def modal_edit_class(request):
+    ret = {'status': True, 'message': None}
+    nid = request.POST.get('nid')
+    try:
+        content = request.POST.get('content')
+        sql = 'update class set title=%s where id=%s'
+        sqlheper.modify(sql, [content, nid, ])
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = str(e)
+
+    return HttpResponse(json.dumps(ret))
