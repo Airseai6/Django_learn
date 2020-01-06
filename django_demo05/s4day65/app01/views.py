@@ -119,8 +119,12 @@ def modal_edit_class(request):
     nid = request.POST.get('nid')
     try:
         content = request.POST.get('content')
-        sql = 'update class set title=%s where id=%s'
-        sqlheper.modify(sql, [content, nid, ])
+        if len(content) == 0:
+            ret['status'] = False
+            ret['message'] = 'ERR: 名称不能为空'
+        else:
+            sql = 'update class set title=%s where id=%s'
+            sqlheper.modify(sql, [content, nid, ])
     except Exception as e:
         ret['status'] = False
         ret['message'] = str(e)

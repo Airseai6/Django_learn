@@ -35,8 +35,11 @@
     <div>
         <a href="/classes">ToClasses</a>
         <hr>
-        <a href="/add_student">AddStudent</a>
-        <input onclick="showModal()" type="button" value="AddStudent2">
+        <a href="/add_student">AddStudent(html)</a>
+        |
+        <input onclick="showModal()" type="button" value="AddStudent(onclick)">
+        |
+        <a id="addModal">AddStudent(jquery)</a>
     </div>
     <table>
         <thead>
@@ -71,6 +74,8 @@
     <p>Class: <input id="title" type="text"></p>
     <input type="button" value="submit" onclick="addAjaxSend()">
     <input type="button" value="cancel" onclick="cancelModal()">
+    <br>
+    <h3><span id="errmsg"></span></h3>
 </div>
 
 <script src="/static/jquery-3.4.1.js"></script>
@@ -94,10 +99,17 @@
                 if(arg == 'ok'){
                     location.reload();
                 }else{
-                    alert(arg);
+                    $('#errmsg').text(arg);
                 }
             }
         })
     }
+
+    $(function(){
+        $('#addModal').click(function(){
+            alert(123);
+        })
+    })
+
 </script>
 </html>

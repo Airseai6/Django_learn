@@ -73,7 +73,7 @@
         <input type="button" value="submit" onclick="AjaxSend()">
         <input type="button" value="cancel" onclick="CancelModal()">
         <br>
-        <span id="errmsg"></span>
+        <h4><span id="errmsg"></span></h4>
     </div>
 
     <div id="editModal" class="modal hide">
@@ -85,7 +85,7 @@
         <input type="button" value="submit" onclick="editAjaxSend()">
         <input type="button" value="cancel" onclick="CancelModal()">
         <br>
-        <span id="errmsg"></span>
+        <h4><span id="editerrmsg"></span></h4>
     </div>
     <script src="/static/jquery-3.4.1.js"></script>
     <script>
@@ -98,6 +98,8 @@
             document.getElementById('shadow').classList.add('hide');
             document.getElementById('modal').classList.add('hide');
             document.getElementById('editModal').classList.add('hide');
+            $('#errmsg').text('');
+            $('#editerrmsg').text('');
         }
 
         function AjaxSend(){
@@ -150,7 +152,7 @@
                         // location.href="/classes/";
                         location.reload();
                     }else{
-                        alert(arg.message);
+                        $('#editerrmsg').text(arg.message);
                     }
                 }
             })
