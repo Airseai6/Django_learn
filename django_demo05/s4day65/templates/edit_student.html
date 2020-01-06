@@ -6,6 +6,11 @@
 </head>
 <body>
     <h1>Edit Student</h1>
+    <div>
+        <a href="/students">ToStudents</a>
+        <a href="/classes">ToClasses</a>
+    </div>
+    <hr>
     <form method="POST" action="/edit_student/?nid={{current_student_info.id}}">
         <p>Student name: <input type="text" name="name" value="{{current_student_info.name}}"></p>
         <p>

@@ -5,50 +5,38 @@
 import pymysql
 
 
-def get_list(sql, args):
-    conn = pymysql.connect(
-        host='127.0.0.1',
-        port=3306,
-        user='root',
-        passwd='',
-        db='s4db65',
-    )
+def c_connect():
+    global conn
+    global cursor
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='root', db='s4db65',)
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-    cursor.execute(sql, args)
-    result = cursor.fetchall()
+
+
+def c_close():
     cursor.close()
     conn.close()
+
+
+def get_list(sql, args):
+    c_connect()
+    cursor.execute(sql, args)
+    result = cursor.fetchall()
+    c_close()
 
     return result
 
 
 def get_one(sql, args):
-    conn = pymysql.connect(
-        host='127.0.0.1',
-        port=3306,
-        user='root',
-        passwd='',
-        db='s4db65',
-    )
-    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    c_connect()
     cursor.execute(sql, args)
     result = cursor.fetchone()
-    cursor.close()
-    conn.close()
+    c_close()
 
     return result
 
 
 def modify(sql, args):
-    conn = pymysql.connect(
-        host='127.0.0.1',
-        port=3306,
-        user='root',
-        passwd='',
-        db='s4db65',
-    )
-    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    c_connect()
     cursor.execute(sql, args)
     conn.commit()
-    cursor.close()
-    conn.close()
+    c_close()
