@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from utils import sqlheper
 
 
@@ -100,3 +100,16 @@ def del_student(request):
     sqlheper.modify(sql, [id, ])
 
     return redirect('/students/')
+
+
+# ----------------------------------- Dialog Box -----------------------------------
+def modal_add_class(request):
+    title = request.POST.get('title')
+    if len(title) > 0:
+        sql = 'insert into class(title) values(%s)'
+        sqlheper.modify(sql, [title, ])
+        return HttpResponse('ok')
+    else:
+        return HttpResponse('ERR：内容不能为空')
+
+

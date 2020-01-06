@@ -1,5 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+        .hide{
+            display: none;
+        }
+        .shadow{
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.4;
+            z-index: 1000;
+
+        }
+        .modal{
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            height: 300px;
+            width: 400px;
+            background-color: white;
+            margin-left: -200px;
+            margin-top: -150px;
+        }
+    </style>
 <head>
     <meta charset="UTF-8">
     <title>Classes</title>
@@ -10,6 +37,8 @@
         <a href="/students">ToStudents</a>
         <hr>
         <a href="/add_class">AddClass</a>
+        |
+        <a onclick="showModal()">AddClass_DialogBox</a>
     </div>
     <table>
         <thead>
@@ -33,5 +62,48 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div id="shadow" class="shadow hide"></div>
+    <div id="modal" class="modal hide">
+<!--        <form method="POST" action="/modal_add_class/">-->
+<!--            <p><input type="text" name="title"></p>-->
+<!--            <input type="submit" value="submit">-->
+<!--        </form>-->
+        <p><input id="title" type="text" name="title"></p>
+        <input type="button" value="submit" onclick="AjaxSend()">
+        <input type="button" value="cancel" onclick="CancelModal()">
+        <br>
+        <span id="errmsg"></span>
+    </div>
+    <script src="/static/jquery-3.4.1.js"></script>
+    <script>
+        function showModal(){
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('modal').classList.remove('hide');
+        }
+
+        function CancelModal(){
+            document.getElementById('shadow').classList.add('hide');
+            document.getElementById('modal').classList.add('hide');
+        }
+
+        function AjaxSend(){
+            $.ajax({
+                url: '/modal_add_class/',
+                type: 'POST',
+                data: {'title':$('#title').val()},
+                success: function(data){
+                        // 当服务处理完成后，返回数据时，该函数自动调用
+                        // data: the value server return
+                        console.log(data);
+                        if(data == 'ok'){
+                            location.href="/classes/";
+                        }else{
+                            $('#errmsg').text(data);
+                        }
+                    }
+            })
+        }
+    </script>
 </body>
 </html>
