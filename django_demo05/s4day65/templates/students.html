@@ -184,6 +184,7 @@
                     if(arg.status){
                         location.reload();
                     }else{
+                        $('#errmsg3').removeClass('hide');
                         $('#errmsg3').text(arg.message);
                     }
                 }
@@ -192,6 +193,8 @@
 
         $('#btnCancel').click(function(){
             $('#shadow, #modal-add, #errmsg3').addClass('hide');
+            // $('#errmsg3').text('');
+
         })
     })
 
@@ -232,8 +235,9 @@
                 url: '/modal_edit_student/',
                 type: 'POST',
                 data:{'name': $('#editName').val(), 'class_id':$('#editClassId').val(), 'nid':$('#editId').val(),},
+                dataType: 'JSON',
                 success:function(arg){
-                    arg = JSON.parse(arg);
+                    // arg = JSON.parse(arg);
                     if(arg.status){
                         location.reload();
                     }else{
@@ -242,9 +246,10 @@
                 }
             })
         })
-
+        
         $('#btnCancel2').click(function(){
             $('#shadow, #editDia, #errmsg4').addClass('hide');
+            // $('#errmsg4').text('');
         })
     })
 </script>
