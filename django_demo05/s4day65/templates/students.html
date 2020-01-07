@@ -59,6 +59,8 @@
                     <td>
                         <a href="/edit_student/?nid={{row.id}}">Edit</a>
                         |
+                        <input  onclick="editStudnt(this)"  class="btnEdit" type="button" value="Edit2">
+                        |
                         <a href="/del_student/?nid={{row.id}}">Delete</a>
                     </td>
                 </tr>
@@ -68,6 +70,7 @@
 </body>
 
 <div id="shadow" class="shadow hide"></div>
+
 <div id="modal" class="modal hide">
     <h3>Add a student</h3>
     <p>Student Name: <input id="name" type="text" placeholder="name"></p>
@@ -77,7 +80,9 @@
     <br>
     <h3><span id="errmsg"></span></h3>
 
-</div><div id="modal-add" class="modal hide">
+</div>
+
+<div id="modal-add" class="modal hide">
     <h3>Add a student</h3>
     <p>Student Name: <input id="addName" name="name" type="text" placeholder="name"></p>
     <p>Class:
@@ -91,6 +96,24 @@
     <input id="btnCancel" type="button" value="cancel">
     <br>
     <h3 id="errmsg3" style="color: red;"></h3>
+</div>
+
+</div><div id="editDia" class="modal hide">
+    <h3>Edit student</h3>
+    <input id="editId" type="text" name="id" style="display: none">
+    <input id="className" type="text" style="display: none">
+    <p>Student Name: <input id="editName" name="name" type="text"></p>
+    <p>Class:
+        <select name="classId" id="editClassId">
+            {% for row in class_list %}
+                <option value="{{ row.id }}">{{ row.title }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <input id="btnEditSubmit" type="button" value="submit">
+    <input id="btnCancel2" type="button" value="cancel">
+    <br>
+    <h3 id="errmsg4" style="color: red;"></h3>
 </div>
 
 <script src="/static/jquery-3.4.1.js"></script>
@@ -126,6 +149,7 @@
         })
     }
 
+
     $(function(){
         $('#addModal').click(function(){
             showModal_add();
@@ -152,5 +176,48 @@
         })
     })
 
+    function editStudnt(ths){
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('editDia').classList.remove('hide');
+            var row = $(ths).parent().prevAll();
+            // console.log(row);
+            var class_name = $(row[0]).text();
+            $('#className').val(class_name);
+
+            var student_name = $(row[1]).text();
+            $('#editName').val(student_name);
+
+            var studentId = $(row[2]).text();
+            $('#editId').val(studentId);
+        }
+
+    $(function(){
+        // $('.btnEdit').click(function(ths){
+        //     $('#shadow, #editDia').removeClass('hide');
+        //     row = $(ths).parent().parent();
+        //     console.log(row);
+        //     // console.log(row[0].text());
+        // })
+
+        $('#btnEditSubmit').click(function(){
+            $.ajax({
+                url: '/modal_edit_student/',
+                type: 'POST',
+                data:{'name': $('#editName').val(), 'class_id':$('#editClassId').val(), 'nid':$('#editId').val(),},
+                success:function(arg){
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        location.reload();
+                    }else{
+                        $('#errmsg4').text(arg.message);
+                    }
+                }
+            })
+        })
+
+        $('#btnCancel2').click(function(){
+            $('#shadow, #editDia, #errmsg4').addClass('hide');
+        })
+    })
 </script>
 </html>

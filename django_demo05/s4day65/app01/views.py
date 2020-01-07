@@ -162,3 +162,23 @@ def modal_add_student3(request):
         ret['message'] = str(e)
 
     return HttpResponse(json.dumps(ret))
+
+
+def modal_edit_student(request):
+    ret = {'status': True, 'message': None}
+    try:
+        name = request.POST.get('name')
+        class_id = request.POST.get('class_id')
+        nid = request.POST.get('nid')
+        print(name, class_id)
+        if len(name) > 0:
+            sql = 'update student set name=%s, class_id=%s where id=%s;'
+            sqlheper.modify(sql, [name, class_id, nid, ])
+        else:
+            ret['status'] = False
+            ret['message'] = 'ERR: name is none.'
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = str(e)
+
+    return HttpResponse(json.dumps(ret))
