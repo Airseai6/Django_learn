@@ -52,8 +52,10 @@ def edit_class(request):
 def students(request):
     sql = 'select student.id,student.name, class.title from student left join class on student.class_id = class.id'
     student_list = sqlheper.get_list(sql, [])
+    sql2 = 'select id,title from class'
+    class_list = sqlheper.get_list(sql2, [])
 
-    return render(request, 'students.html', {'student_list': student_list})
+    return render(request, 'students.html', {'student_list': student_list, 'class_list': class_list, })
 
 
 def add_student(request):
@@ -141,3 +143,22 @@ def modal_add_student(request):
         return HttpResponse('ok')
     else:
         return HttpResponse('ERR：内容不能为空')
+
+
+def modal_add_student3(request):
+    ret = {'status': True, 'message': None}
+    try:
+        name = request.POST.get('name')
+        class_id = request.POST.get('class_id')
+        print(name, class_id)
+        if len(name) > 0:
+            sql = 'insert into student(name, class_id) values(%s, %s);'
+            sqlheper.modify(sql, [name, class_id, ])
+        else:
+            ret['status'] = False
+            ret['message'] = 'ERR: name is none.'
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = str(e)
+
+    return HttpResponse(json.dumps(ret))

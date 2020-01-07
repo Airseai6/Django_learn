@@ -70,12 +70,27 @@
 <div id="shadow" class="shadow hide"></div>
 <div id="modal" class="modal hide">
     <h3>Add a student</h3>
-    <p>Student Name: <input id="name" type="text"></p>
+    <p>Student Name: <input id="name" type="text" placeholder="name"></p>
     <p>Class: <input id="title" type="text"></p>
     <input type="button" value="submit" onclick="addAjaxSend()">
     <input type="button" value="cancel" onclick="cancelModal()">
     <br>
     <h3><span id="errmsg"></span></h3>
+
+</div><div id="modal-add" class="modal hide">
+    <h3>Add a student</h3>
+    <p>Student Name: <input id="addName" name="name" type="text" placeholder="name"></p>
+    <p>Class:
+        <select name="classId" id="addClassId">
+            {% for row in class_list %}
+                <option value="{{ row.id }}">{{ row.title }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <input id="btnAdd" type="button" value="submit">
+    <input id="btnCancel" type="button" value="cancel">
+    <br>
+    <h3 id="errmsg3" style="color: red;"></h3>
 </div>
 
 <script src="/static/jquery-3.4.1.js"></script>
@@ -85,9 +100,15 @@
         document.getElementById('modal').classList.remove('hide');
     }
 
+    function showModal_add(){
+        document.getElementById('shadow').classList.remove('hide');
+        document.getElementById('modal-add').classList.remove('hide');
+    }
+
     function cancelModal(){
         document.getElementById('shadow').classList.add('hide');
         document.getElementById('modal').classList.add('hide');
+        document.getElementById('errmsg').classList.add('hide');
     }
 
     function addAjaxSend(){
@@ -107,7 +128,27 @@
 
     $(function(){
         $('#addModal').click(function(){
-            alert(123);
+            showModal_add();
+        })
+
+        $('#btnAdd').click(function(){
+            $.ajax({
+                url: '/modal_add_student3/',
+                type: 'POST',
+                data:{'name': $('#addName').val(), 'class_id':$('#addClassId').val(), },
+                success: function(arg){
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        location.reload();
+                    }else{
+                        $('#errmsg3').text(arg.message);
+                    }
+                }
+            })
+        })
+
+        $('#btnCancel').click(function(){
+            $('#shadow, #modal-add, #errmsg3').addClass('hide');
         })
     })
 
