@@ -55,11 +55,12 @@
                 <tr>
                     <td>{{ row.id }}</td>
                     <td>{{ row.name }}</td>
-                    <td>{{ row.title }}</td>
+                    <td clsId='{{ row.class_id }}' >{{ row.title }}</td>
                     <td>
                         <a href="/edit_student/?nid={{row.id}}">Edit</a>
                         |
-                        <input  onclick="editStudnt(this)"  class="btnEdit" type="button" value="Edit2">
+                        <!-- <input  onclick="editStudnt(this)" type="button" value="Edit(onclick)"> -->
+                        <input class="btnEdit" type="button" value="Edit(jQuery)">
                         |
                         <a href="/del_student/?nid={{row.id}}">Delete</a>
                     </td>
@@ -105,6 +106,24 @@
     <p>Student Name: <input id="editName" name="name" type="text"></p>
     <p>Class:
         <select name="classId" id="editClassId">
+            {% for row in class_list %}
+                <option value="{{ row.id }}">{{ row.title }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <input id="btnEditSubmit" type="button" value="submit">
+    <input id="btnCancel2" type="button" value="cancel">
+    <br>
+    <h3 id="errmsg4" style="color: red;"></h3>
+</div>
+
+</div><div id="editModal" class="modal hide">
+    <h3>Edit Student Info</h3>
+    <input id="editId" type="text" style="display: none">
+    <input id="className" type="text" style="display: none">
+    <p>Student Name: <input id="editName" name="name" type="text"></p>
+    <p>Class:
+        <select name="editClassId" id="editClassId">
             {% for row in class_list %}
                 <option value="{{ row.id }}">{{ row.title }}</option>
             {% endfor %}
@@ -176,11 +195,12 @@
         })
     })
 
-    function editStudnt(ths){
+/*     function editStudnt(ths){
+        //way: onclick
             document.getElementById('shadow').classList.remove('hide');
             document.getElementById('editDia').classList.remove('hide');
             var row = $(ths).parent().prevAll();
-            // console.log(row);
+
             var class_name = $(row[0]).text();
             $('#className').val(class_name);
 
@@ -189,15 +209,23 @@
 
             var studentId = $(row[2]).text();
             $('#editId').val(studentId);
-        }
+
+            var classId = $(row[0]).attr('clsId');
+            $('#editClassId').val(classId);
+        } */
 
     $(function(){
-        // $('.btnEdit').click(function(ths){
-        //     $('#shadow, #editDia').removeClass('hide');
-        //     row = $(ths).parent().parent();
-        //     console.log(row);
-        //     // console.log(row[0].text());
-        // })
+        $('.btnEdit').click(function(){
+            $('#shadow, #editDia').removeClass('hide');
+            var tds = $(this).parent().prevAll();
+            var studentId = $(tds[2]).text();
+            var studentName = $(tds[1]).text();
+            var classId = $(tds[0]).attr('clsId');
+
+            $('#editId').val(studentId);
+            $('#editName').val(studentName);
+            $('#editClassId').val(classId);
+        })
 
         $('#btnEditSubmit').click(function(){
             $.ajax({

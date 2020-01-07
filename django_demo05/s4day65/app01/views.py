@@ -50,7 +50,7 @@ def edit_class(request):
 
 
 def students(request):
-    sql = 'select student.id,student.name, class.title from student left join class on student.class_id = class.id'
+    sql = 'select student.id,student.name, student.class_id, class.title from student left join class on student.class_id = class.id'
     student_list = sqlheper.get_list(sql, [])
     sql2 = 'select id,title from class'
     class_list = sqlheper.get_list(sql2, [])
@@ -170,7 +170,6 @@ def modal_edit_student(request):
         name = request.POST.get('name')
         class_id = request.POST.get('class_id')
         nid = request.POST.get('nid')
-        print(name, class_id)
         if len(name) > 0:
             sql = 'update student set name=%s, class_id=%s where id=%s;'
             sqlheper.modify(sql, [name, class_id, nid, ])
