@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>teacher</title>
+</head>
+<body>
+    <h1>Teachers List</h1>
+    <div>
+        <a href="/classes">ToClass</a>
+        |
+        <a href="/students">ToStudents</a>
+        <hr>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>TeacherName</th>
+                <th>Classes to teach</th>
+                <th>Operate</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in teacher_list %}
+                <tr>
+                    <td>{{ row.tid }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.title }}</td>
+                    <td>
+                        <a>Edit</a>
+                        |
+                        <a>Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
