@@ -184,20 +184,6 @@ def modal_edit_student(request):
 
 
 # ----------------------------------- 多对多，以老师表展示 -----------------------------------
-def deal_dic(dic_list):
-    result = [].append(dic_list[0])
-    tid_list = [].append(dic_list[0]['tid'])
-    for item in dic_list:
-        temp = []
-        if item['tid'] not in tid_list:
-            result.append(item)
-            tid_list.append(item['tid'])
-            if item['tltle'] not in temp:
-                temp.append(item['tltle'])
-        else:
-                temp.append(item['tltle'])
-
-
 def teachers(request):
     # sql = 'select id, name from teacher'
     sql = """
@@ -206,7 +192,13 @@ def teachers(request):
             left join class on class.id = teacher2class.class_id;
     """
     teacher_list = sqlheper.get_list(sql, [])
-    print(teacher_list)
+    result = {}
+    for row in teacher_list:
+        tid = row['tid']
+        if tid in result:
+            result[tid]['titles'].append(row['title'])
+        else:
+            result[tid] = {'tid':row['tid'], 'name':row['name'], 'titles':[row['title'],]}
 
-    return render(request, 'teacher.html', {'teacher_list':teacher_list})
+    return render(request, 'teacher.html', {'teacher_list':result.values})
 

@@ -25,8 +25,13 @@
             {% for row in teacher_list %}
                 <tr>
                     <td>{{ row.tid }}</td>
-                    <td>{{ row.name }}</td>
-                    <td>{{ row.title }}</td>
+                    <td style="text-align: center;">{{ row.name }}</td>
+                    <td>
+                        {% for item in row.titles %}
+                            <span style="display: inline-block; 
+                            padding: 5px; border:1px solid red;">{{ item }}</span>
+                        {% endfor %}
+                    </td>
                     <td>
                         <a>Edit</a>
                         |
