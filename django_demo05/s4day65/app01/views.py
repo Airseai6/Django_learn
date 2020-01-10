@@ -202,3 +202,6 @@ def teachers(request):
 
     return render(request, 'teacher.html', {'teacher_list':result.values})
 
+
+def add_teacher(request):
+    pass
