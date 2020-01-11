@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>add a teacher</title>
+</head>
+
+<body>
+    <h1>AddTeacher</h1>
+    <div>
+        <a href="/teachers/">ToTeachersList</a>
+        <hr>
+    </div>
+
+    <form method="POST" action="/add_teacher/">
+        <p><input type="text" name='name' placeholder="teacher name" ></p>
+        <p> Class:
+            <select name="class_ids" id="" multiple size="6" >
+                {% for item in class_list %}
+                    <option value="{{ item.id }}">
+                        {{ item.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>

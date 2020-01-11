@@ -40,3 +40,15 @@ def modify(sql, args):
     cursor.execute(sql, args)
     conn.commit()
     c_close()
+
+
+def create(sql, args):
+    c_connect()
+    cursor.execute(sql, args)
+    conn.commit()
+    last_row_id = cursor.lastrowid
+    c_close()
+    
+    return last_row_id
+
+

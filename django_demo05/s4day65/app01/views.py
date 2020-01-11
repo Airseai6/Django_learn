@@ -204,4 +204,18 @@ def teachers(request):
 
 
 def add_teacher(request):
-    pass
+    if request.method == 'GET':
+        sql = 'select id, title from class'
+        class_list = sqlheper.get_list(sql, [])
+        return render(request, 'add_teacher.html', {'class_list': class_list},)
+    else:
+        name = request.POST.get('name')
+        class_ids = request.POST.getlist('class_ids')
+        sql2 = 'insert into teacher(name) values(%s)'
+        teacher_id = sqlheper.create(sql2, [name,])
+        sql3 = 'insert into teacher2class(teacher_id, class_id) values(%s, %s)'
+
+        for item in class_ids:
+            sqlheper.modify(sql3, [teacher_id, item, ])
+
+        return HttpResponse('ok')
