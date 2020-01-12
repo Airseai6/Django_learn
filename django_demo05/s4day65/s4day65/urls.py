@@ -37,4 +37,5 @@ urlpatterns = [
 
     path('teachers/', views.teachers),
     path('add_teacher/', views.add_teacher),
+    path('edit_teacher/', views.edit_teacher),
 ]

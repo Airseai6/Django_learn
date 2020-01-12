@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from utils import sqlheper
+from utils import sqlhelper
 import json
 
 
@@ -214,8 +215,72 @@ def add_teacher(request):
         sql2 = 'insert into teacher(name) values(%s)'
         teacher_id = sqlheper.create(sql2, [name,])
         sql3 = 'insert into teacher2class(teacher_id, class_id) values(%s, %s)'
+        
+        # 多次连接多次提交
+        # for item in class_ids:
+        #     sqlheper.modify(sql3, [teacher_id, item, ])
 
-        for item in class_ids:
-            sqlheper.modify(sql3, [teacher_id, item, ])
+        # 一次连接多次提交
+        # obj = sqlheper.SqlHelper()
+        # for cls_id in class_ids:
+        #     obj.modify(sql3, [teacher_id, cls_id, ])
+        # obj.close()
 
-        return HttpResponse('ok')
+        # 一次连接一次提交
+        data_list = []
+        for cls_id in class_ids:
+            temp = (teacher_id, cls_id, )
+            data_list.append(temp)
+
+        obj = sqlhelper.SqlHelper()
+        obj.multiple_modify(sql3, data_list)
+        obj.close()
+
+        return redirect('/teachers/')
+
+
+def edit_teacher(request):
+    if request.method == 'GET':
+        nid = request.GET.get('nid')
+        sql = 'select id, name from teacher where id=%s'
+        obj = sqlhelper.SqlHelper()
+        teacher_info = obj.get_one(sql, [nid, ])
+        sql2 = 'select class_id from teacher2class where teacher_id=%s'
+        class_id_list = obj.get_list(sql2, [nid, ])
+        sql3 = 'select id, title from class'
+        class_list = obj.get_list(sql3, [])
+        obj.close()
+
+        temp = []
+        for i in class_id_list:
+            temp.append(i['class_id'])
+
+        return render(request, 'edit_teacher.html', {
+            'teacher_info': teacher_info,
+            'class_id_list': temp,
+            'class_list': class_list,
+        })
+    else:
+        nid = request.GET.get('nid')
+        name = request.POST.get('name')
+        class_ids = request.POST.getlist('class_ids')
+
+        obj = sqlhelper.SqlHelper()
+        # update teacher list
+        sql4 = 'update teacher set name=%s where id=%s'
+        obj.modify(sql4, [name, nid, ])
+        # update teacher2class list, first delete after insert
+        sql5 = 'delete from teacher2class where teacher_id=%s'
+        obj.modify(sql5, [nid, ])
+
+        data_list = []
+        for cls_id in class_ids:
+            temp = (nid, cls_id, )
+            data_list.append(temp)
+        # map ? lammda 
+        sql6 = 'insert into teacher2class(teacher_id, class_id) values(%s, %s)'
+        obj = sqlhelper.SqlHelper()
+        obj.multiple_modify(sql6, data_list)
+        obj.close()
+
+        return redirect('/teachers/')
