@@ -321,3 +321,11 @@ def modal_edit_teacher(request):
         ret['message'] = 'ERR: ' + str(e)
     
     return HttpResponse(json.dumps(ret))
+
+
+def test(request):
+    return render(request, 'test.html')
+
+
+def layout(request):
+    return render(request, 'layout.html')
