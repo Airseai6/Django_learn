@@ -38,4 +38,7 @@ urlpatterns = [
     path('teachers/', views.teachers),
     path('add_teacher/', views.add_teacher),
     path('edit_teacher/', views.edit_teacher),
+
+    path('get_all_class/', views.get_all_class),
+    path('modal_edit_teacher/', views.modal_edit_teacher),
 ]

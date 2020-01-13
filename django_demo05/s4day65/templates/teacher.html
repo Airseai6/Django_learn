@@ -1,5 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .hide {
+        display: none;
+    }
+
+    .shadow {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: black;
+        opacity: 0.4;
+        z-index: 999;
+    }
+
+    .loading {
+        position: fixed;
+        width: 1067px;
+        height: 600px;
+        left: 50%;
+        top: 50%;
+        margin-left:-533px;
+        margin-top:-300px;
+        background-image: url("/static/images/loading2.gif");
+    }
+
+    .modal {
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        top: 50%;
+        height: 400px;
+        width: 400px;
+        background-color: white;
+        margin-left: -200px;
+        margin-top: -200px;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <title>teacher</title>
@@ -11,7 +50,8 @@
         |
         <a href="/students">ToStudents</a>
         <hr>
-        <a href="/add_teacher">Add A Teacher</a>
+        <a href="/add_teacher">AddATeacher(URL)</a>
+        <a id="btnAdd">AddATeacher(Dialog)</a>
     </div>
     <table>
         <thead>
@@ -42,5 +82,74 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div id="shadow" class="shadow hide"></div>
+    <div id="loading" class="loading hide"></div>
+    <div id="addModal" class="modal hide">
+        <h3>Add a teacher</h3>
+        <p>Name: <input type="text" name="name" id="addName"> </p>
+        <p>Class:
+            <select name="" id="classIds" multiple size='10'></select>
+        </p>
+        <a id="addSubmit">submit</a>
+    </div>
+    
+    <script src="/static/jquery-3.4.1.js"></script>
+    <script>
+        $(function () {
+            $('#btnAdd').click(function () {
+                bindAdd();
+            })
+            
+            $('#addSubmit').click(function () {
+                bindAddSubmit();
+            })
+
+            function bindAdd() {
+                $('#shadow, #loading').removeClass('hide');
+
+                $.ajax({
+                    url: "/get_all_class/",
+                    // type: "POST",
+                    // data: {},
+                    dataType: "JSON",
+                    type: "GET",
+                    success:function(arg){
+                        $.each(arg, function(i, row) {
+                            // create a <option></option> tag insert into <select></select>
+                            var tag = document.createElement('option');
+                            tag.innerHTML = row.title;
+                            tag.setAttribute('value', row.id);
+                            
+                            $('#classIds').append(tag);
+                        })
+
+                        $('#loading').addClass('hide');
+                        $('#addModal').removeClass('hide');
+                    }
+                })
+            }
+        })
+
+        function bindAddSubmit(){
+            var name = $("#addName").val();
+            var class_id_list = $("#classIds").val();
+            $.ajax({
+                url: "/modal_edit_teacher/",
+                type: "POST",
+                data: {'name':name, 'class_id_list':class_id_list},
+                traditional: true, // if data include list
+                dataType: "JSON",
+                success:function(args) {
+                    if(args.status){
+                        location.reload();
+                    }else{
+                        alert(args.message);
+                    }
+                }
+            })
+        }
+    </script>
+
 </body>
 </html>

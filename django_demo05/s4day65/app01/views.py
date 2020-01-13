@@ -284,3 +284,40 @@ def edit_teacher(request):
         obj.close()
 
         return redirect('/teachers/')
+
+
+def get_all_class(request):
+    # 以后的操作可能会费时间，现在假设费时间，增加loading界面
+    import time
+    time.sleep(0.4)
+    obj = sqlhelper.SqlHelper()
+    sql = 'select id, title from class'
+    class_list = obj.get_list(sql, [])
+    obj.close()
+    return HttpResponse(json.dumps(class_list))
+
+
+def modal_edit_teacher(request):
+    ret = {'status':True, 'message':None,}
+    try:
+        name = request.POST.get('name')
+        class_id_list = request.POST.getlist('class_id_list')
+
+        cur = sqlhelper.SqlHelper()
+        sql = 'insert into teacher(name) values(%s)'
+        teacher_id = cur.create(sql, [name, ])
+
+        data_list = []
+        for cls_id in class_id_list:
+            temp = (teacher_id, cls_id, )
+            data_list.append(temp)
+        
+        sql2 = 'insert into teacher2class(teacher_id, class_id) values(%s, %s)'
+        cur.multiple_modify(sql2, data_list,)
+        cur.close()
+
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = 'ERR: ' + str(e)
+    
+    return HttpResponse(json.dumps(ret))
