@@ -12,7 +12,8 @@ def login(request):
         pwd = request.POST.get('pwd')
         if username == 'alex' and pwd == '123':
             obj = redirect('/classes/')
-            obj.set_cookie('ticket', 'qwertyuiop')
+            # obj.set_cookie('ticket', 'qwertyuiop', max_age=10)
+            obj.set_signed_cookie('ticket', 'qwertyuiop', salt='ttt',)
             return obj
         else:
             return redirect('/login/')
@@ -20,7 +21,9 @@ def login(request):
 
 def classes(request):
     # 去请求的cookie中找凭证
-    tk = request.COOKIES.get('ticket')
+    # tk = request.COOKIES.get('ticket')
+    tk = request.get_signed_cookie('ticket', salt='ttt',)
+    print(tk)
     if tk != 'qwertyuiop':
         return redirect('/login/')
 
