@@ -4,7 +4,26 @@ from utils import sqlhelper
 import json
 
 
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    else:
+        username = request.POST.get('name')
+        pwd = request.POST.get('pwd')
+        if username == 'alex' and pwd == '123':
+            obj = redirect('/classes/')
+            obj.set_cookie('ticket', 'qwertyuiop')
+            return obj
+        else:
+            return redirect('/login/')
+
+
 def classes(request):
+    # 去请求的cookie中找凭证
+    tk = request.COOKIES.get('ticket')
+    if tk != 'qwertyuiop':
+        return redirect('/login/')
+
     sql1 = 'select id,title from class'
     class_list = sqlheper.get_list(sql1, [])
 

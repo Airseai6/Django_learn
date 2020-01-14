@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<style>
-        .hide{
+{% extends 'layout.html' %}
+
+{% block css %}
+    <style>
+        .hide {
             display: none;
         }
-        .shadow{
+    
+        .shadow {
             position: fixed;
             left: 0;
             top: 0;
@@ -14,7 +16,8 @@
             opacity: 0.4;
             z-index: 999;
         }
-        .modal{
+    
+        .modal1 {
             position: fixed;
             z-index: 1000;
             left: 50%;
@@ -26,20 +29,14 @@
             margin-top: -150px;
         }
     </style>
-<head>
-    <meta charset="UTF-8">
-    <title>Classes</title>
-    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.css">
-</head>
-<body>
-    <div style="width: 700px; margin: 0 auto;">
+{% endblock %}
+
+
+
+{% block xx %}
+    <div>
         <h1>Classes List</h1>
         <div>
-            <a href="/students">ToStudents</a>
-            |
-            <a href="/teachers">ToTeachers</a>
-            <hr>
             <div style="margin: 10px;">
                 <a href="/add_class" class="btn btn-primary active">AddClass_newURL</a>
                 |
@@ -56,24 +53,23 @@
             </thead>
             <tbody>
                 {% for row in class_list %}
-                    <tr>
-                        <td>{{ row.id }}</td>
-                        <td>{{ row.title }}</td>
-                        <td>
-                            <a href="/edit_class/?nid={{row.id}}" class="glyphicon glyphicon-pencil"></a>
-                            |
-    <!--                        <a onclick="modelEdit(this)">Edit2</a>-->
-                            <input onclick="modelEdit(this)" type="button" class="fa fa-tasks" value="Edit2">
-                            |
-                            <a href="/del_class/?nid={{row.id}}" class="glyphicon glyphicon-trash"></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.title }}</td>
+                    <td>
+                        <a href="/edit_class/?nid={{row.id}}" class="glyphicon glyphicon-pencil"></a>
+                        |
+                        <input onclick="modelEdit(this)" type="button" class="fa fa-tasks" value="Edit2">
+                        |
+                        <a href="/del_class/?nid={{row.id}}" class="glyphicon glyphicon-trash"></a>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     <div id="shadow" class="shadow hide"></div>
-    <div id="modal" class="modal hide">
+    <div id="modal" class="modal1 hide">
         <h3>Add a class</h3>
         <p><input id="title" type="text" name="title"></p>
         <input type="button" value="submit" onclick="AjaxSend()">
@@ -81,8 +77,8 @@
         <br>
         <h4><span id="errmsg"></span></h4>
     </div>
-
-    <div id="editModal" class="modal hide">
+    
+    <div id="editModal" class="modal1 hide">
         <h3>Edit Dialog Box</h3>
         <p>
             <input id="editId" type="text" name="id" style="display: none">
@@ -93,14 +89,18 @@
         <br>
         <h4><span id="editerrmsg"></span></h4>
     </div>
-    <script src="/static/jquery-3.4.1.js"></script>
+{% endblock %}
+
+
+
+{% block js %}
     <script>
-        function showModal(){
+        function showModal() {
             document.getElementById('shadow').classList.remove('hide');
             document.getElementById('modal').classList.remove('hide');
         }
 
-        function CancelModal(){
+        function CancelModal() {
             document.getElementById('shadow').classList.add('hide');
             document.getElementById('modal').classList.add('hide');
             document.getElementById('editModal').classList.add('hide');
@@ -108,25 +108,25 @@
             $('#editerrmsg').text('');
         }
 
-        function AjaxSend(){
+        function AjaxSend() {
             $.ajax({
                 url: '/modal_add_class/',
                 type: 'POST',
-                data: {'title':$('#title').val()},
-                success: function(data){
-                        // 当服务处理完成后，返回数据时，该函数自动调用
-                        // data: the value server return
-                        console.log(data);
-                        if(data == 'ok'){
-                            location.href="/classes/";
-                        }else{
-                            $('#errmsg').text(data);
-                        }
+                data: { 'title': $('#title').val() },
+                success: function (data) {
+                    // 当服务处理完成后，返回数据时，该函数自动调用
+                    // data: the value server return
+                    console.log(data);
+                    if (data == 'ok') {
+                        location.href = "/classes/";
+                    } else {
+                        $('#errmsg').text(data);
                     }
+                }
             })
         }
 
-        function modelEdit(ths){
+        function modelEdit(ths) {
             document.getElementById('shadow').classList.remove('hide');
             document.getElementById('editModal').classList.remove('hide');
             /*
@@ -143,21 +143,21 @@
             $('#editId').val(contentId);
         }
 
-        function editAjaxSend(){
+        function editAjaxSend() {
             var nid = $('#editId').val();
             var content = $('#editTitle').val();
             $.ajax({
                 url: '/modal_edit_class/',
                 type: 'POST',
-                data: {'nid': nid, 'content': content, },
-                success: function(arg){
+                data: { 'nid': nid, 'content': content, },
+                success: function (arg) {
                     // arg字符串  JSON.parse(str) -> 对象
                     // JSON.stringify(对象) -> 字符串
                     arg = JSON.parse(arg);
-                    if(arg.status){
+                    if (arg.status) {
                         // location.href="/classes/";
                         location.reload();
-                    }else{
+                    } else {
                         $('#editerrmsg').text(arg.message);
                     }
                 }
@@ -165,5 +165,4 @@
         }
 
     </script>
-</body>
-</html>
+{% endblock %}

@@ -1,49 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<style>
-    .hide{
-        display: none;
-    }
-    .shadow{
-        position: fixed;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        background-color: black;
-        opacity: 0.4;
-        z-index: 999;
-    }
-    .modal{
-        position: fixed;
-        z-index: 1000;
-        left: 50%;
-        top: 50%;
-        height: 300px;
-        width: 400px;
-        background-color: white;
-        margin-left: -200px;
-        margin-top: -150px;
-    }
-</style>
-<head>
-    <meta charset="UTF-8">
-    <title>Students</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+
+{% block css %}
+    <style>
+        .hide {
+            display: none;
+        }
+    
+        .shadow {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.4;
+            z-index: 999;
+        }
+    
+        .modal1 {
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            height: 300px;
+            width: 400px;
+            background-color: white;
+            margin-left: -200px;
+            margin-top: -150px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block xx %}
     <h1>Students List</h1>
     <div>
-        <a href="/classes">ToClasses</a>
-        |
-        <a href="/teachers">ToTeachers</a>
-        <hr>
         <a href="/add_student">AddStudent(html)</a>
         |
         <input onclick="showModal()" type="button" value="AddStudent(onclick)">
         |
         <a id="addModal">AddStudent(jquery)</a>
     </div>
-    <table>
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
             <tr>
                 <th>ID</th>
@@ -54,205 +52,208 @@
         </thead>
         <tbody>
             {% for row in student_list %}
-                <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.name }}</td>
-                    <td clsId='{{ row.class_id }}' >{{ row.title }}</td>
-                    <td>
-                        <a href="/edit_student/?nid={{row.id}}">Edit</a>
-                        |
-                        <!-- <input  onclick="editStudnt(this)" type="button" value="Edit(onclick)"> -->
-                        <input class="btnEdit" type="button" value="Edit(jQuery)">
-                        |
-                        <a href="/del_student/?nid={{row.id}}">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td clsId='{{ row.class_id }}'>{{ row.title }}</td>
+                <td>
+                    <a href="/edit_student/?nid={{row.id}}">Edit</a>
+                    |
+                    <!-- <input  onclick="editStudnt(this)" type="button" value="Edit(onclick)"> -->
+                    <input class="btnEdit" type="button" value="Edit(jQuery)">
+                    |
+                    <a href="/del_student/?nid={{row.id}}">Delete</a>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
 
-<div id="shadow" class="shadow hide"></div>
-
-<div id="modal" class="modal hide">
-    <h3>Add a student</h3>
-    <p>Student Name: <input id="name" type="text" placeholder="name"></p>
-    <p>Class: <input id="title" type="text"></p>
-    <input type="button" value="submit" onclick="addAjaxSend()">
-    <input type="button" value="cancel" onclick="cancelModal()">
-    <br>
-    <h3><span id="errmsg"></span></h3>
-
-</div>
-
-<div id="modal-add" class="modal hide">
-    <h3>Add a student</h3>
-    <p>Student Name: <input id="addName" name="name" type="text" placeholder="name"></p>
-    <p>Class:
-        <select name="classId" id="addClassId">
-            {% for row in class_list %}
+    <div id="shadow" class="shadow hide"></div>
+    
+    <div id="modal" class="modal1 hide">
+        <h3>Add a student</h3>
+        <p>Student Name: <input id="name" type="text" placeholder="name"></p>
+        <p>Class: <input id="title" type="text"></p>
+        <input type="button" value="submit" onclick="addAjaxSend()">
+        <input type="button" value="cancel" onclick="cancelModal()">
+        <br>
+        <h3><span id="errmsg"></span></h3>
+    
+    </div>
+    
+    <div id="modal-add" class="modal1 hide">
+        <h3>Add a student</h3>
+        <p>Student Name: <input id="addName" name="name" type="text" placeholder="name"></p>
+        <p>Class:
+            <select name="classId" id="addClassId">
+                {% for row in class_list %}
                 <option value="{{ row.id }}">{{ row.title }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <input id="btnAdd" type="button" value="submit">
-    <input id="btnCancel" type="button" value="cancel">
-    <br>
-    <h3 id="errmsg3" style="color: red;"></h3>
-</div>
-
-</div><div id="editDia" class="modal hide">
-    <h3>Edit student</h3>
-    <input id="editId" type="text" name="id" style="display: none">
-    <input id="className" type="text" style="display: none">
-    <p>Student Name: <input id="editName" name="name" type="text"></p>
-    <p>Class:
-        <select name="classId" id="editClassId">
-            {% for row in class_list %}
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnAdd" type="button" value="submit">
+        <input id="btnCancel" type="button" value="cancel">
+        <br>
+        <h3 id="errmsg3" style="color: red;"></h3>
+    </div>
+    
+    </div>
+    <div id="editDia" class="modal1 hide">
+        <h3>Edit student</h3>
+        <input id="editId" type="text" name="id" style="display: none">
+        <input id="className" type="text" style="display: none">
+        <p>Student Name: <input id="editName" name="name" type="text"></p>
+        <p>Class:
+            <select name="classId" id="editClassId">
+                {% for row in class_list %}
                 <option value="{{ row.id }}">{{ row.title }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <input id="btnEditSubmit" type="button" value="submit">
-    <input id="btnCancel2" type="button" value="cancel">
-    <br>
-    <h3 id="errmsg4" style="color: red;"></h3>
-</div>
-
-</div><div id="editModal" class="modal hide">
-    <h3>Edit Student Info</h3>
-    <input id="editId" type="text" style="display: none">
-    <input id="className" type="text" style="display: none">
-    <p>Student Name: <input id="editName" name="name" type="text"></p>
-    <p>Class:
-        <select name="editClassId" id="editClassId">
-            {% for row in class_list %}
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnEditSubmit" type="button" value="submit">
+        <input id="btnCancel2" type="button" value="cancel">
+        <br>
+        <h3 id="errmsg4" style="color: red;"></h3>
+    </div>
+    
+    </div>
+    <div id="editModal" class="modal1 hide">
+        <h3>Edit Student Info</h3>
+        <input id="editId" type="text" style="display: none">
+        <input id="className" type="text" style="display: none">
+        <p>Student Name: <input id="editName" name="name" type="text"></p>
+        <p>Class:
+            <select name="editClassId" id="editClassId">
+                {% for row in class_list %}
                 <option value="{{ row.id }}">{{ row.title }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <input id="btnEditSubmit" type="button" value="submit">
-    <input id="btnCancel2" type="button" value="cancel">
-    <br>
-    <h3 id="errmsg4" style="color: red;"></h3>
-</div>
-
-<script src="/static/jquery-3.4.1.js"></script>
-<script>
-    function showModal(){
-        document.getElementById('shadow').classList.remove('hide');
-        document.getElementById('modal').classList.remove('hide');
-    }
-
-    function showModal_add(){
-        document.getElementById('shadow').classList.remove('hide');
-        document.getElementById('modal-add').classList.remove('hide');
-    }
-
-    function cancelModal(){
-        document.getElementById('shadow').classList.add('hide');
-        document.getElementById('modal').classList.add('hide');
-        document.getElementById('errmsg').classList.add('hide');
-    }
-
-    function addAjaxSend(){
-        $.ajax({
-            url: '/modal_add_student/',
-            type: 'POST',
-            data: {'name':$('#name').val(), 'title':$('#title').val(), },
-            success: function(arg){
-                if(arg == 'ok'){
-                    location.reload();
-                }else{
-                    $('#errmsg').text(arg);
-                }
-            }
-        })
-    }
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnEditSubmit" type="button" value="submit">
+        <input id="btnCancel2" type="button" value="cancel">
+        <br>
+        <h3 id="errmsg4" style="color: red;"></h3>
+    </div>
+{% endblock %}
 
 
-    $(function(){
-        $('#addModal').click(function(){
-            showModal_add();
-        })
-
-        $('#btnAdd').click(function(){
-            $.ajax({
-                url: '/modal_add_student3/',
-                type: 'POST',
-                data:{'name': $('#addName').val(), 'class_id':$('#addClassId').val(), },
-                success: function(arg){
-                    arg = JSON.parse(arg);
-                    if(arg.status){
-                        location.reload();
-                    }else{
-                        $('#errmsg3').removeClass('hide');
-                        $('#errmsg3').text(arg.message);
-                    }
-                }
-            })
-        })
-
-        $('#btnCancel').click(function(){
-            $('#shadow, #modal-add, #errmsg3').addClass('hide');
-            // $('#errmsg3').text('');
-
-        })
-    })
-
-/*     function editStudnt(ths){
-        //way: onclick
+{% block js %}
+    <script>
+        function showModal() {
             document.getElementById('shadow').classList.remove('hide');
-            document.getElementById('editDia').classList.remove('hide');
-            var row = $(ths).parent().prevAll();
+            document.getElementById('modal').classList.remove('hide');
+        }
 
-            var class_name = $(row[0]).text();
-            $('#className').val(class_name);
+        function showModal_add() {
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('modal-add').classList.remove('hide');
+        }
 
-            var student_name = $(row[1]).text();
-            $('#editName').val(student_name);
+        function cancelModal() {
+            document.getElementById('shadow').classList.add('hide');
+            document.getElementById('modal').classList.add('hide');
+            document.getElementById('errmsg').classList.add('hide');
+        }
 
-            var studentId = $(row[2]).text();
-            $('#editId').val(studentId);
-
-            var classId = $(row[0]).attr('clsId');
-            $('#editClassId').val(classId);
-        } */
-
-    $(function(){
-        $('.btnEdit').click(function(){
-            $('#shadow, #editDia').removeClass('hide');
-            var tds = $(this).parent().prevAll();
-            var studentId = $(tds[2]).text();
-            var studentName = $(tds[1]).text();
-            var classId = $(tds[0]).attr('clsId');
-
-            $('#editId').val(studentId);
-            $('#editName').val(studentName);
-            $('#editClassId').val(classId);
-        })
-
-        $('#btnEditSubmit').click(function(){
+        function addAjaxSend() {
             $.ajax({
-                url: '/modal_edit_student/',
+                url: '/modal_add_student/',
                 type: 'POST',
-                data:{'name': $('#editName').val(), 'class_id':$('#editClassId').val(), 'nid':$('#editId').val(),},
-                dataType: 'JSON',
-                success:function(arg){
-                    // arg = JSON.parse(arg);
-                    if(arg.status){
+                data: { 'name': $('#name').val(), 'title': $('#title').val(), },
+                success: function (arg) {
+                    if (arg == 'ok') {
                         location.reload();
-                    }else{
-                        $('#errmsg4').text(arg.message);
+                    } else {
+                        $('#errmsg').text(arg);
                     }
                 }
             })
+        }
+
+        $(function () {
+            $('#addModal').click(function () {
+                showModal_add();
+            })
+
+            $('#btnAdd').click(function () {
+                $.ajax({
+                    url: '/modal_add_student3/',
+                    type: 'POST',
+                    data: { 'name': $('#addName').val(), 'class_id': $('#addClassId').val(), },
+                    success: function (arg) {
+                        arg = JSON.parse(arg);
+                        if (arg.status) {
+                            location.reload();
+                        } else {
+                            $('#errmsg3').removeClass('hide');
+                            $('#errmsg3').text(arg.message);
+                        }
+                    }
+                })
+            })
+
+            $('#btnCancel').click(function () {
+                $('#shadow, #modal-add, #errmsg3').addClass('hide');
+                // $('#errmsg3').text('');
+
+            })
         })
+
+        /*     function editStudnt(ths){
+                //way: onclick
+                    document.getElementById('shadow').classList.remove('hide');
+                    document.getElementById('editDia').classList.remove('hide');
+                    var row = $(ths).parent().prevAll();
         
-        $('#btnCancel2').click(function(){
-            $('#shadow, #editDia, #errmsg4').addClass('hide');
-            // $('#errmsg4').text('');
+                    var class_name = $(row[0]).text();
+                    $('#className').val(class_name);
+        
+                    var student_name = $(row[1]).text();
+                    $('#editName').val(student_name);
+        
+                    var studentId = $(row[2]).text();
+                    $('#editId').val(studentId);
+        
+                    var classId = $(row[0]).attr('clsId');
+                    $('#editClassId').val(classId);
+                } */
+
+        $(function () {
+            $('.btnEdit').click(function () {
+                $('#shadow, #editDia').removeClass('hide');
+                var tds = $(this).parent().prevAll();
+                var studentId = $(tds[2]).text();
+                var studentName = $(tds[1]).text();
+                var classId = $(tds[0]).attr('clsId');
+
+                $('#editId').val(studentId);
+                $('#editName').val(studentName);
+                $('#editClassId').val(classId);
+            })
+
+            $('#btnEditSubmit').click(function () {
+                $.ajax({
+                    url: '/modal_edit_student/',
+                    type: 'POST',
+                    data: { 'name': $('#editName').val(), 'class_id': $('#editClassId').val(), 'nid': $('#editId').val(), },
+                    dataType: 'JSON',
+                    success: function (arg) {
+                        // arg = JSON.parse(arg);
+                        if (arg.status) {
+                            location.reload();
+                        } else {
+                            $('#errmsg4').text(arg.message);
+                        }
+                    }
+                })
+            })
+
+            $('#btnCancel2').click(function () {
+                $('#shadow, #editDia, #errmsg4').addClass('hide');
+                // $('#errmsg4').text('');
+            })
         })
-    })
-</script>
-</html>
+    </script>
+{% endblock %}
+

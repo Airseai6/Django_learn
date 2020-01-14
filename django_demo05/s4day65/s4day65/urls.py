@@ -45,4 +45,6 @@ urlpatterns = [
 
     path('test/', views.test),
     path('layout/', views.layout),
+
+    path('login/', views.login),
 ]

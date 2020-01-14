@@ -1,59 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<style>
-    .hide {
-        display: none;
-    }
+{% extends 'layout.html' %}
 
-    .shadow {
-        position: fixed;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        background-color: black;
-        opacity: 0.4;
-        z-index: 999;
-    }
+{% block css %}
+    <style>
+        .hide {
+            display: none;
+        }
+    
+        .shadow {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.4;
+            z-index: 999;
+        }
+    
+        .loading {
+            position: fixed;
+            width: 1067px;
+            height: 600px;
+            left: 50%;
+            top: 50%;
+            margin-left: -533px;
+            margin-top: -300px;
+            background-image: url("/static/images/loading2.gif");
+        }
+    
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            height: 400px;
+            width: 400px;
+            background-color: white;
+            margin-left: -200px;
+            margin-top: -200px;
+        }
+    </style>
+{% endblock %}
 
-    .loading {
-        position: fixed;
-        width: 1067px;
-        height: 600px;
-        left: 50%;
-        top: 50%;
-        margin-left:-533px;
-        margin-top:-300px;
-        background-image: url("/static/images/loading2.gif");
-    }
 
-    .modal {
-        position: fixed;
-        z-index: 1000;
-        left: 50%;
-        top: 50%;
-        height: 400px;
-        width: 400px;
-        background-color: white;
-        margin-left: -200px;
-        margin-top: -200px;
-    }
-</style>
-<head>
-    <meta charset="UTF-8">
-    <title>teacher</title>
-</head>
-<body>
+{% block xx %}
     <h1>Teachers List</h1>
     <div>
-        <a href="/classes">ToClass</a>
-        |
-        <a href="/students">ToStudents</a>
-        <hr>
         <a href="/add_teacher">AddATeacher(URL)</a>
         <a id="btnAdd">AddATeacher(Dialog)</a>
     </div>
-    <table>
+    <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
             <tr>
                 <th>ID</th>
@@ -64,25 +60,25 @@
         </thead>
         <tbody>
             {% for row in teacher_list %}
-                <tr>
-                    <td>{{ row.tid }}</td>
-                    <td style="text-align: center;">{{ row.name }}</td>
-                    <td>
-                        {% for item in row.titles %}
-                            <span style="display: inline-block; 
-                            padding: 5px; border:1px solid red;">{{ item }}</span>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <a href="/edit_teacher/?nid={{ row.tid }}">Edit</a>
-                        |
-                        <a>Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ row.tid }}</td>
+                <td style="text-align: center;">{{ row.name }}</td>
+                <td>
+                    {% for item in row.titles %}
+                    <span style="display: inline-block; 
+                                padding: 5px; border:1px solid red;">{{ item }}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="/edit_teacher/?nid={{ row.tid }}">Edit</a>
+                    |
+                    <a>Delete</a>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-
+    
     <div id="shadow" class="shadow hide"></div>
     <div id="loading" class="loading hide"></div>
     <div id="addModal" class="modal hide">
@@ -93,14 +89,16 @@
         </p>
         <a id="addSubmit">submit</a>
     </div>
-    
-    <script src="/static/jquery-3.4.1.js"></script>
+{% endblock %}
+
+
+{% block js %}
     <script>
         $(function () {
             $('#btnAdd').click(function () {
                 bindAdd();
             })
-            
+
             $('#addSubmit').click(function () {
                 bindAddSubmit();
             })
@@ -114,13 +112,13 @@
                     // data: {},
                     dataType: "JSON",
                     type: "GET",
-                    success:function(arg){
-                        $.each(arg, function(i, row) {
+                    success: function (arg) {
+                        $.each(arg, function (i, row) {
                             // create a <option></option> tag insert into <select></select>
                             var tag = document.createElement('option');
                             tag.innerHTML = row.title;
                             tag.setAttribute('value', row.id);
-                            
+
                             $('#classIds').append(tag);
                         })
 
@@ -131,25 +129,24 @@
             }
         })
 
-        function bindAddSubmit(){
+        function bindAddSubmit() {
             var name = $("#addName").val();
             var class_id_list = $("#classIds").val();
             $.ajax({
                 url: "/modal_edit_teacher/",
                 type: "POST",
-                data: {'name':name, 'class_id_list':class_id_list},
+                data: { 'name': name, 'class_id_list': class_id_list },
                 traditional: true, // if data include list
                 dataType: "JSON",
-                success:function(args) {
-                    if(args.status){
+                success: function (args) {
+                    if (args.status) {
                         location.reload();
-                    }else{
+                    } else {
                         alert(args.message);
                     }
                 }
             })
         }
     </script>
+{% endblock %}
 
-</body>
-</html>
