@@ -5,9 +5,12 @@
 *.docx
 # *.csv
 # *.json
+
 *.bmp
-*.png
-*.jpg
+# *.png
+# *.jpg
+# *.gif
+
 *.spec
 *.pyc
 *.svg
@@ -19,4 +22,8 @@ build
 dist
 .idea
 
+# Django migrations
+migrations
+
 # large Files
+

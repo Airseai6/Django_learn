@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分页测试</title>
+</head>
+<body>
+    <h1>用户列表</h1>
+    <ul>
+        {% for row in user_list %}
+            <li>{{ row.username }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ page_info.pager | safe }}
+</body>
+</html>

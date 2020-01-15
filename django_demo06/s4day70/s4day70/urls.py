@@ -23,4 +23,6 @@ urlpatterns = [
     # path('index/', views.index),
     # re_path(r'^edit/(\w+)/(\w+)/', views.edit),
     # re_path(r'^edit/(?P<a1>\w+)/(?P<a2>\w+)/', views.edit),
+    path('test/', views.test),
+    re_path(r'^custom.html$', views.custom),
 ]
