@@ -68,9 +68,32 @@ class Login(View):
 
 def test(request):
     # 创建数据
-    models.UserType.objects.create(title='普通用户')
-    models.UserType.objects.create(title='装逼用户')
-    models.UserType.objects.create(title='大咖用户')
+    # models.UserType.objects.create(title='普通用户')
+    # models.UserType.objects.create(title='装逼用户')
+    # models.UserType.objects.create(title='大咖用户')
+
+    # models.UserInfo.objects.filter(nid__gt=8).delete()
+    # models.UserInfo2.objects.create(
+    #     name='alex', age=18, ut_id=1)
+    # models.UserInfo2.objects.create(
+    #     name='eric', age=18, ut_id=2)
+    # models.UserInfo2.objects.create(
+    #     name='zhihu', age=18, ut_id=3)
+
+    # 排序
+    # user_list = models.UserInfo2.objects.all().order_by('id')
+    # user_list = models.UserInfo2.objects.all().order_by('-id', 'name')
+    # print(user_list)
+
+    # 分组
+    # v = models.UserInfo2.objects.values('ut_id')     # select ut_id from userinfo
+    from django.db.models import Count
+    # v = models.UserInfo2.objects.values('ut_id').annotate(xx=Count('id'))
+    # print(v.query)
+    # v = models.UserInfo2.objects.values('ut_id').annotate(xx=Count('id')).filter(xx__gt=2)
+    # print(v.query)
+    v = models.UserInfo2.objects.filter(id__gt=2).values('ut_id').annotate(xx=Count('id')).filter(xx__gt=2)
+    print(v.query)
 
     return HttpResponse('...')
 

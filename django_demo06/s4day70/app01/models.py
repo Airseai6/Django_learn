@@ -19,16 +19,19 @@ class UserInfo(models.Model):
     ug = models.ForeignKey('UserGroup', on_delete=models.CASCADE, null=True)
 
 
-# class UserType(models.Model):
-#     """
-#     用户类型
-#     """
-#     title = models.CharField(max_length=32)
+class UserType(models.Model):
+    """
+    用户类型
+    """
+    title = models.CharField(max_length=32)
 
-# class UserInfo(models.Model):
-#     """
-#     用户表
-#     """
-#     name = models.CharField(max_length=16)
-#     age = models.IntegerField()
-#     ut = models.ForeignKey('UserType', on_delete=models.CASCADE,)
+class UserInfo2(models.Model):
+    """
+    用户表
+    """
+    name = models.CharField(max_length=16)
+    age = models.IntegerField()
+    ut = models.ForeignKey('UserType', on_delete=models.CASCADE,)
+
+    def __str__(self):
+        return "%s-%s" %(self.id, self.name)
