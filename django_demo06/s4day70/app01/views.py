@@ -87,13 +87,20 @@ def test(request):
 
     # 分组
     # v = models.UserInfo2.objects.values('ut_id')     # select ut_id from userinfo
-    from django.db.models import Count
+    # from django.db.models import Count
     # v = models.UserInfo2.objects.values('ut_id').annotate(xx=Count('id'))
     # print(v.query)
     # v = models.UserInfo2.objects.values('ut_id').annotate(xx=Count('id')).filter(xx__gt=2)
     # print(v.query)
-    v = models.UserInfo2.objects.filter(id__gt=2).values('ut_id').annotate(xx=Count('id')).filter(xx__gt=2)
-    print(v.query)
+    # v = models.UserInfo2.objects.filter(id__gt=2).values('ut_id').annotate(xx=Count('id')).filter(xx__gt=2)
+    # print(v.query)
+
+    # # select_related 查询主动做连表
+    # q = models.UserInfo2.objects.all().select_related('ut')
+    # # select * from userinfo
+    # # select * from userinfo inner join usertype on ...
+    # for row in q:
+    #     print(row.name, row.ut.title)
 
     return HttpResponse('...')
 
