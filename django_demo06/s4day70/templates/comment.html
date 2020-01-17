@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>comments</title>
+</head>
+<body>
+    <h1>显示区</h1>
+    {% for item in msg %}
+        <!-- <div>{{ item | safe }}</div> -->
+        <div>{{ item }}</div>
+    {% endfor %}
+    <hr>
+    <h1>评论区</h1>
+    <form action="/app02/comment.html" method="POST">
+        <input type="text" name='content'>
+        <br>
+        <input type="submit" name='submit'>
+    </form>
+</body>
+</html>
