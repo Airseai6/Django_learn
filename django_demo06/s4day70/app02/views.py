@@ -60,9 +60,12 @@ def test(request):
         print(obj.g.nick)
 
 
-
-
-
-
     print('------------------ ORM 练习测试区域  end ------------------')
     return HttpResponse('...')
+
+
+def csrf1(request):
+    if request.method == 'GET':
+        return render(request, 'csrf1.html')
+    else:
+        return HttpResponse('ok')

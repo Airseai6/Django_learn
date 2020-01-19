@@ -3,10 +3,12 @@ from django.db import models
 # Create your models here.
 class Boy(models.Model):
     name = models.CharField(max_length=32)
+    # m = models.ManyToManyField('Girl', through='Love', through_fields=('b','g',))
 
 
 class Girl(models.Model):
     nick = models.CharField(max_length=32)
+    # m = models.ManyToManyField('Boy')
 
 
 class Love(models.Model):
