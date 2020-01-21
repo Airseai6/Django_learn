@@ -19,3 +19,12 @@ class Love(models.Model):
         unique_together = [
             ('b', 'g'),
         ]
+
+
+class UserAdmin(models.Model):
+    username = models.CharField(max_length=32)
+    password = models.CharField(max_length=32)
+
+
+
+

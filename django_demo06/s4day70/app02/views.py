@@ -69,3 +69,31 @@ def csrf1(request):
         return render(request, 'csrf1.html')
     else:
         return HttpResponse('ok')
+
+
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    else:
+        u = request.POST.get('user')
+        p = request.POST.get('pwd')
+        obj = models.UserAdmin.objects.filter(username=u, password=p).first()
+        if obj:
+            # 1、生成随机字符串
+            # 2、通过cookie发送个客户端
+            # 3、服务器保存
+            # {
+            #     随机字符串1: [username:'xxx', password:'xxx', ....]
+            # }
+            request.session['username'] = obj.username
+            return redirect('/app02/index.html')
+        else:
+            return render(request, 'login.html', {'msg':'用户或密码错误'})
+
+
+def index(request):
+    v = request.session.get('username')
+    if v:
+        return HttpResponse('login success %s' %v)
+    else:
+        return redirect('/app02/login.html')
