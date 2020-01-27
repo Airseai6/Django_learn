@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+    <h3>login</h3>
+    <form action="/login/" method="POST">
+        {% csrf_token %}
+        <p>
+            username: <input type="text" name="username">
+            {{ obj.errors.username.0 }}
+        </p>
+        <p>
+            password: <input type="password" name="password">
+            {{ obj.errors.password.0 }}
+        </p>
+        <input type="submit" value="submit">
+        <br>
+    </form>
+</body>
+</html>
