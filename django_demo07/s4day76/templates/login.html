@@ -6,7 +6,7 @@
 </head>
 <body>
     <h3>login</h3>
-    <form action="/login/" method="POST">
+    <form id="f1" action="/login/" method="POST">
         {% csrf_token %}
         <p>
             username: <input type="text" name="username">
@@ -17,7 +17,36 @@
             {{ obj.errors.password.0 }}
         </p>
         <input type="submit" value="submit">
+        <a onclick="submitForm();">submit(ajax)</a>
         <br>
     </form>
+    <script src='/static/jquery-3.4.1.js'></script>
+    <script>
+        function submitForm(){
+            $('.c1').remove();
+            $.ajax({
+                url:'/ajax_login/',
+                type:'POST',
+                data:$('#f1').serialize(), // form中的数据打包
+                dataType:'JSON',
+                success:function(arg){
+                    console.log(arg);
+                    if(arg.status){
+
+                    }else{
+                        $.each(arg.msg, function(index, value){
+                            console.log(index, value);
+                            var tag = document.createElement('span');
+                            tag.innerHTML = value[0];
+                            tag.className = 'c1';
+                            $('#f1').find('input[name="'+ index +'"]').after(tag);
+                            // $('#f1').find('input[name="username"]').after(tag);
+                        })
+                    }
+                }
+
+            })
+        }
+    </script>
 </body>
 </html>
