@@ -1,61 +1,39 @@
 {% extends 'layout.html' %}
 
-{% block css %}{% endblock %}
+{% block css %}
+<style type="text/css">
+    #chart01 {
+        float: left;
+        height: 660px; width: 880px;
+}
+    #chart02 {
+        float: right;;
+        height: 660px;
+        width: 439px;
+}
+</style>
+{% endblock %}
 
 
 {% block content %}
-    <h1>index</h1>
-    <h3>welecome! {{ username }} </h3>
-    <a href="/logout/"><input type="button" value="logout"></a>
-    <div id="chart01" style="height: 600px; width: 800px;"></div>
+<div id="chart01"></div>
+<div id="chart02"></div>
 {% endblock %}
 
 
 {% block js %}
-<script src="/static/plugins/echarts.js"></script>
-<script src="/static/plugins/map/china.js"></script>
+<script src="/static/plugins/echarts/echarts.js"></script>
+<script src="/static/plugins/echarts/map/china.js"></script>
 <script type="text/javascript">
-    var dataList = [
-        { name: "南海诸岛", value: 0 },
-        { name: '北京', value: randomValue() },
-        { name: '天津', value: randomValue() },
-        { name: '上海', value: randomValue() },
-        { name: '重庆', value: randomValue() },
-        { name: '河北', value: randomValue() },
-        { name: '河南', value: randomValue() },
-        { name: '云南', value: randomValue() },
-        { name: '辽宁', value: randomValue() },
-        { name: '黑龙江', value: randomValue() },
-        { name: '湖南', value: randomValue() },
-        { name: '安徽', value: randomValue() },
-        { name: '山东', value: randomValue() },
-        { name: '新疆', value: randomValue() },
-        { name: '江苏', value: randomValue() },
-        { name: '浙江', value: randomValue() },
-        { name: '江西', value: randomValue() },
-        { name: '湖北', value: randomValue() },
-        { name: '广西', value: randomValue() },
-        { name: '甘肃', value: randomValue() },
-        { name: '山西', value: randomValue() },
-        { name: '内蒙古', value: randomValue() },
-        { name: '陕西', value: randomValue() },
-        { name: '吉林', value: randomValue() },
-        { name: '福建', value: randomValue() },
-        { name: '贵州', value: randomValue() },
-        { name: '广东', value: randomValue() },
-        { name: '青海', value: randomValue() },
-        { name: '西藏', value: randomValue() },
-        { name: '四川', value: randomValue() },
-        { name: '宁夏', value: randomValue() },
-        { name: '海南', value: randomValue() },
-        { name: '台湾', value: randomValue() },
-        { name: '香港', value: randomValue() },
-        { name: '澳门', value: randomValue() }
-    ]
-    var myChart = echarts.init(document.getElementById('chart01'));
-    function randomValue() {
-        return Math.round(Math.random() * 1000);
+    var dataList = [{ name: "南海诸岛", value: 0 },]
+    var dataRet = {{ dataRet | safe }}
+    for(var i=0;i<34;i++){
+        dataList.push({
+            name: dataRet['areaTree'][0]['children'][i]['name'], 
+            value: dataRet['areaTree'][0]['children'][i]['total']['confirm']
+        })
     }
+    var myChart = echarts.init(document.getElementById('chart01'));
     option = {
         tooltip: {
             formatter: function (params, ticket, callback) {
@@ -75,7 +53,7 @@
         },
         geo: {
             map: 'china',
-            roam: true,//不开启缩放和平移
+            roam: false,//不开启缩放和平移
             zoom: 1.23,//视角缩放比例
             label: {
                 normal: {
@@ -100,7 +78,7 @@
         },
         series: [
             {
-                name: '信息量',
+                name: '确诊人数',
                 type: 'map',
                 geoIndex: 0,
                 data: dataList
@@ -109,20 +87,31 @@
     };
     myChart.setOption(option);
     myChart.on('click', function (params) {
-        alert(params.name);
-    });
+        document.getElementById('chart02').innerHTML = '';
+        var title = ['序号', '城市', '确诊人数', '今天新增确诊人数', '疑似人数', '今天新增疑似人数', '死亡人数', '今天死亡', '治愈人数', '今天治愈'];
 
-    /*  setTimeout(function () {
-          myChart.setOption({
-              series : [
-                  {
-                      name: '信息量',
-                      type: 'map',
-                      geoIndex: 0,
-                      data:dataList
-                  }
-              ]
-          });
-      },1000)*/
+        row = document.createElement("tr"); //创建行
+        for(var i=0;i<title.length;i++){
+            td1 = document.createElement("td"); //创建单元格
+            td1.appendChild(document.createTextNode(title[i])); //为单元格添加内容
+            row.appendChild(td1); //将单元格添加到行内
+        }
+        document.getElementById("chart02").append(row); //将行添加到<tbody>中
+        
+        // alert(params.name);
+        var areaIndex = {}
+        for(var i=0;i<34;i++){
+            areaIndex[dataList['name']] = i;
+        }
+        for(var j=0;j<dataRet['areaTree'][0]['children'][areaIndex[params.name]]['children'].length;j++){
+            row = document.createElement("tr"); //创建行
+            for (var i = 0; i < title.length; i++) {
+                td1 = document.createElement("td"); //创建单元格
+                td1.appendChild(document.createTextNode(title[i])); //为单元格添加内容
+                row.appendChild(td1); //将单元格添加到行内
+            }
+            document.getElementById("chart02").append(row); //将行添加到<tbody>中
+        }
+    });
 </script>
 {% endblock %}
