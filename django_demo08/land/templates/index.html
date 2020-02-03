@@ -86,28 +86,37 @@
         ]
     };
     myChart.setOption(option);
-    myChart.on('click', function (params) {
-        document.getElementById('chart02').innerHTML = '';
-        var title = ['序号', '城市', '确诊人数', '今天新增确诊人数', '疑似人数', '今天新增疑似人数', '死亡人数', '今天死亡', '治愈人数', '今天治愈'];
 
+    function insert_row(params) {
         row = document.createElement("tr"); //创建行
-        for(var i=0;i<title.length;i++){
+        for (var i = 0; i < params.length; i++) {
             td1 = document.createElement("td"); //创建单元格
-            td1.appendChild(document.createTextNode(title[i])); //为单元格添加内容
+            td1.appendChild(document.createTextNode(params[i])); //为单元格添加内容
             row.appendChild(td1); //将单元格添加到行内
         }
         document.getElementById("chart02").append(row); //将行添加到<tbody>中
+    }
+    
+    myChart.on('click', function (params) {
+        document.getElementById('chart02').innerHTML = '';
+        var title = ['序号', '城市', '确诊人数', '今天新增确诊人数', '疑似人数', '今天新增疑似人数', '死亡人数', '今天死亡', '治愈人数', '今天治愈'];
+        insert_row(title);  // 插入表头
         
         // alert(params.name);
-        var areaIndex = {}
+        var areaIndex = []
         for(var i=0;i<34;i++){
-            areaIndex[dataList['name']] = i;
+            areaIndex.push(dataList['name']);
         }
-        for(var j=0;j<dataRet['areaTree'][0]['children'][areaIndex[params.name]]['children'].length;j++){
+        alert(params.name);
+        alert(dataList.length);
+        alert(areaIndex.indexOf(params.name))
+        alert(dataList['name'].indexOf(params.name))
+        // for(var j=0;j<dataRet['areaTree'][0]['children'][areaIndex[params.name]]['children'].length;j++){
+        for(var j=0;j<dataRet['areaTree'][0]['children'][0]['children'].length;j++){
             row = document.createElement("tr"); //创建行
             for (var i = 0; i < title.length; i++) {
                 td1 = document.createElement("td"); //创建单元格
-                td1.appendChild(document.createTextNode(title[i])); //为单元格添加内容
+                td1.appendChild(document.createTextNode('data')); //为单元格添加内容
                 row.appendChild(td1); //将单元格添加到行内
             }
             document.getElementById("chart02").append(row); //将行添加到<tbody>中
