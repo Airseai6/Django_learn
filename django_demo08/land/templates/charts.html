@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+<style type="text/css">
+
+    .chart_s {
+        float: left;
+        height: 50%;
+        width: 50%;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div id="chart01" class="chart_s"></div>
+<div id="chart02" class="chart_s"></div>
+<div id="chart03" class="chart_s"></div>
+<div id="chart04" class="chart_s"></div>
+{% endblock %}
+
+
+{% block js %}
+<script src="/static/plugins/echarts/echarts.js"></script>
+<script src="/static/plugins/echarts/map/china.js"></script>
+<script type="text/javascript">
+    function formLineCharts(chartId, sourceData, titleName,) {
+        var dom = document.getElementById(chartId);
+        var myChart = echarts.init(dom);
+        var app = {};
+
+        option = null;
+        option = {
+            title: {
+                text: titleName
+            },
+            legend: {},
+            tooltip: {},
+            dataset: {
+                source: sourceData,
+            },
+            xAxis: { type: 'category' },
+            yAxis: {},
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            series: [
+                { type: 'line' },
+                { type: 'line' },
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+        
+    }
+
+    // 构造数据
+    var dataRet = {{ dataRet | safe }}
+    var chart01Data = [['product','累计确诊','累计疑似',],]
+    for(var i=0;i<dataRet['chinaDayList'].length;i++){
+        chart01Data.push([dataRet['chinaDayList'][i]['date'], dataRet['chinaDayList'][i]['confirm'], dataRet['chinaDayList'][i]['suspect'],],);
+    }
+    var chart02Data = [['product','新增确诊','新增疑似',],]
+    for(var i=0;i<dataRet['chinaDayAddList'].length;i++){
+        chart02Data.push([dataRet['chinaDayAddList'][i]['date'], dataRet['chinaDayAddList'][i]['confirm'], dataRet['chinaDayAddList'][i]['suspect'],],);
+    }
+    var chart03Data = [['product','累计死亡','累计治愈',],]
+    for(var i=0;i<dataRet['chinaDayList'].length;i++){
+        chart03Data.push([dataRet['chinaDayList'][i]['date'], dataRet['chinaDayList'][i]['dead'], dataRet['chinaDayList'][i]['heal'],],);
+    }
+    var chart04Data = [['product','新增死亡','新增治愈',],]
+    for(var i=0;i<dataRet['chinaDayAddList'].length;i++){
+        chart04Data.push([dataRet['chinaDayAddList'][i]['date'], dataRet['chinaDayAddList'][i]['dead'], dataRet['chinaDayAddList'][i]['heal'],],);
+    }
+
+    formLineCharts('chart01', chart01Data, '累计确诊/疑似(人)',);
+    formLineCharts('chart02', chart02Data, '每天新增确诊/疑似(人)',);
+    formLineCharts('chart03', chart03Data, '累计死亡/治愈(人)',);
+    formLineCharts('chart04', chart04Data, '每天死亡/治愈(人)',);
+
+</script>
+{% endblock %}

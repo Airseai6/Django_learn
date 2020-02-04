@@ -29,9 +29,12 @@
     </div>
     <div class="pg-body">
         <div class="menus">
-            <a href="#"><i class="fa fa-window-restore" aria-hidden="true"></i> 地图显示</a>
-            <a href="#"><i class="fa fa-window-restore" aria-hidden="true"></i> 曲线趋势</a>
+            <a href="/index/"><i class="fa fa-window-restore" aria-hidden="true"></i> 地图显示</a>
+            <a href="/areacharts/"><i class="fa fa-bar-chart" aria-hidden="true"></i> 地区趋势</a>
+            <a href="/charts/"><i class="fa fa-line-chart" aria-hidden="true"></i> 曲线趋势</a>
             <a href="#"><i class="fa fa-commenting" aria-hidden="true"></i> 相关消息</a>
+            <p>数据来自腾讯新闻</p>
+            <input id="refresh" class="btn btn-primary" type="button" value="数据刷新" />
         </div>
         <div class="content">
             {% block content %}{% endblock %}
@@ -39,6 +42,29 @@
     </div>
 
     <script src="/static/jquery-3.4.1.js"></script>
+    <!-- <script>
+        $(function() {
+            $('#refresh').click(function() {
+                $.ajax({
+                    url: '/refresh/',
+                    type: 'POST',
+                    data: {'k':'v',},
+                    success: function (arg) {
+                        if(arg == 'ok'){
+                            location.reload();
+                        }
+                    }
+                })
+            })
+        })
+    </script> -->
+    <script>
+        $(function() {
+            $('#refresh').click(function() {
+                location.reload();
+            })
+        })
+    </script>
     {% block js %}{% endblock %}
 </body>
 </html>

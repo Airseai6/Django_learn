@@ -35,10 +35,32 @@ def logout(request):
     return rep
 
 
+# global dataRet
+# dataRet = models.get_data()
+# dataRet.pop('isShowAdd')
+
+
+# def refresh(request):
+#     dataRet = models.get_data()
+#     dataRet.pop('isShowAdd')
+#     return HttpResponse('ok')
+
+
 def index(request):
     username = request.get_signed_cookie('username', default=0, salt='123')
     if username:
         dataRet = models.get_data()
+        dataRet.pop('isShowAdd')
         return render(request, 'index.html', {'username': username, 'dataRet': dataRet},)
+    else:
+        return redirect('/login/')
+
+
+def charts(request):
+    username = request.get_signed_cookie('username', default=0, salt='123')
+    if username:
+        dataRet = models.get_data()
+        dataRet.pop('isShowAdd')
+        return render(request, 'charts.html', {'username': username, 'dataRet': dataRet},)
     else:
         return redirect('/login/')

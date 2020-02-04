@@ -3,15 +3,15 @@
 {% block css %}
 <style type="text/css">
     #chart01 {
-        float: left;
-        height: 660px; width: 880px;
+        width: 66.7%;
 }
     #chart02 {
-        float: right;;
-        height: 660px;
-        width: 439px;
-        align-items: center;
+        width: 33.3%;
 }
+    #chart01, #chart02 {
+        float: left;
+        height: 100%;
+    }
 </style>
 {% endblock %}
 
@@ -108,7 +108,7 @@
 
     myChart.on('click', function (params) {
         document.getElementById('table01').innerHTML = '';
-        var title = ['序号', '城市', '确诊人数', '新增确诊(今天)', '死亡人数', '治愈人数',];
+        var title = ['序号', '地区', '确诊人数', '新增确诊(今天)', '死亡人数', '治愈人数',];
         insert_row(title, 'table01');  // 插入表头
         
         var areaList = []
@@ -120,7 +120,7 @@
         if (areaList.indexOf(params.name)>=0) {
             // 省份总和
             row0 = document.createElement("tr"); //创建行
-            insert_td('', row0);
+            insert_td('总', row0);
             insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['name'], row0);
             insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['total']['confirm'], row0);
             insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['today']['confirm'], row0);
@@ -131,7 +131,7 @@
             for (var i = 0; i < dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'].length; i++) {
                 row = document.createElement("tr"); //创建行
                 // 这行内的单元格中的内容
-                insert_td(i + 1, row);
+                insert_td(i+1, row);
                 insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['name'], row);
                 insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['total']['confirm'], row);
                 insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['today']['confirm'], row);
