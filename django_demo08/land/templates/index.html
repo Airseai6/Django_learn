@@ -10,6 +10,7 @@
         float: right;;
         height: 660px;
         width: 439px;
+        align-items: center;
 }
 </style>
 {% endblock %}
@@ -17,7 +18,9 @@
 
 {% block content %}
 <div id="chart01"></div>
-<div id="chart02"></div>
+<div id="chart02">
+    <table class="table table-striped" id="table01"></table>
+</div>
 {% endblock %}
 
 
@@ -87,40 +90,61 @@
     };
     myChart.setOption(option);
 
-    function insert_row(params) {
+    function insert_row(params, table_id) {
         row = document.createElement("tr"); //创建行
         for (var i = 0; i < params.length; i++) {
             td1 = document.createElement("td"); //创建单元格
             td1.appendChild(document.createTextNode(params[i])); //为单元格添加内容
             row.appendChild(td1); //将单元格添加到行内
         }
-        document.getElementById("chart02").append(row); //将行添加到<tbody>中
+        document.getElementById(table_id).append(row); //将行添加到<tbody>中
     }
     
+    function insert_td(content, row_name) {
+        td1 = document.createElement("td"); //创建单元格
+        td1.appendChild(document.createTextNode(content)); //为单元格添加内容
+        row_name.appendChild(td1);
+    }
+
     myChart.on('click', function (params) {
-        document.getElementById('chart02').innerHTML = '';
-        var title = ['序号', '城市', '确诊人数', '今天新增确诊人数', '疑似人数', '今天新增疑似人数', '死亡人数', '今天死亡', '治愈人数', '今天治愈'];
-        insert_row(title);  // 插入表头
+        document.getElementById('table01').innerHTML = '';
+        var title = ['序号', '城市', '确诊人数', '新增确诊(今天)', '死亡人数', '治愈人数',];
+        insert_row(title, 'table01');  // 插入表头
         
-        // alert(params.name);
-        var areaIndex = []
+        var areaList = []
         for(var i=0;i<34;i++){
-            areaIndex.push(dataList['name']);
+            areaList.push(dataRet['areaTree'][0]['children'][i]['name']);
         }
-        alert(params.name);
-        alert(dataList.length);
-        alert(areaIndex.indexOf(params.name))
-        alert(dataList['name'].indexOf(params.name))
-        // for(var j=0;j<dataRet['areaTree'][0]['children'][areaIndex[params.name]]['children'].length;j++){
-        for(var j=0;j<dataRet['areaTree'][0]['children'][0]['children'].length;j++){
-            row = document.createElement("tr"); //创建行
-            for (var i = 0; i < title.length; i++) {
-                td1 = document.createElement("td"); //创建单元格
-                td1.appendChild(document.createTextNode('data')); //为单元格添加内容
-                row.appendChild(td1); //将单元格添加到行内
+        
+        // alert(areaList.indexOf(params.name));
+        if (areaList.indexOf(params.name)>=0) {
+            // 省份总和
+            row0 = document.createElement("tr"); //创建行
+            insert_td('', row0);
+            insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['name'], row0);
+            insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['total']['confirm'], row0);
+            insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['today']['confirm'], row0);
+            insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['total']['dead'], row0);
+            insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['total']['heal'], row0);
+            document.getElementById("table01").append(row0); //将行添加到<tbody>中
+
+            for (var i = 0; i < dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'].length; i++) {
+                row = document.createElement("tr"); //创建行
+                // 这行内的单元格中的内容
+                insert_td(i + 1, row);
+                insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['name'], row);
+                insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['total']['confirm'], row);
+                insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['today']['confirm'], row);
+                insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['total']['dead'], row);
+                insert_td(dataRet['areaTree'][0]['children'][areaList.indexOf(params.name)]['children'][i]['total']['heal'], row);
+
+                document.getElementById("table01").append(row); //将行添加到<tbody>中
             }
-            document.getElementById("chart02").append(row); //将行添加到<tbody>中
+        } else {
+            // 不然选择南海诸岛的时候他找不到会显示序号为-1，然后报错
+            document.getElementById('table01').innerHTML = '';
         }
+        
     });
 </script>
 {% endblock %}
