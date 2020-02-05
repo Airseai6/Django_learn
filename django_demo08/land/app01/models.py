@@ -35,11 +35,11 @@ def get_data():
     url = 'https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5'
     data = json.loads(requests.get(url=url).json()['data'])
 
-    # print(data['areaTree'][0]['children'][0]['name'])
-    # print(data['areaTree'][0]['children'][0]['total']['confirm'])
-
-    # dataDic = {'南海诸岛':0,}
-    # for i in range(34):
-    #     dataDic[data['areaTree'][0]['children'][i]['name']] = data['areaTree'][0]['children'][i]['total']['confirm']
-
     return data
+
+
+def get_news():
+	url = 'https://view.inews.qq.com/g2/getOnsInfo?name=wuwei_ww_time_line'
+	news = json.loads(requests.get(url=url).json()['data'])
+    
+	return news

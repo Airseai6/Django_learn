@@ -25,4 +25,6 @@ urlpatterns = [
 
     path('charts/', views.charts),
     # path('refresh/', views.refresh),
+    path('news/', views.news),
+    path('download/', views.download),
 ]

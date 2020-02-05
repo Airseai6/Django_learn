@@ -2,6 +2,8 @@ from django.forms import Form, fields
 from django.shortcuts import render, HttpResponse, redirect
 
 from . import models
+from utils.pager import PageInfo
+from django.http import FileResponse
 
 
 class LoginFrom(Form):
@@ -64,3 +66,38 @@ def charts(request):
         return render(request, 'charts.html', {'username': username, 'dataRet': dataRet},)
     else:
         return redirect('/login/')
+
+
+global newsRet
+newsRet = models.get_news()[::-1]
+
+def news(request):
+    username = request.get_signed_cookie('username', default=0, salt='123')
+    if username:
+        # newsRet = models.get_news()[::-1]
+        dataRet = models.get_data()
+
+        page_info = PageInfo(request.GET.get('page'), len(newsRet), 5, '/news',)
+        news_list = newsRet[page_info.start():page_info.end()]
+
+        return render(request, 'news.html', {'username': username, 'page_info': page_info, 'news_list': news_list, },)
+    else:
+        return redirect('/login/')
+
+
+def download(request):
+    username = request.get_signed_cookie('username', default=0, salt='123')
+    if username:
+        try:
+            file=open(r'E:\02_Scripts\Python\Django_learn\django_demo08\land\static\css\commons.css','rb')
+            print(type(file))
+            # response = FileResponse(file)
+            response = FileResponse('123')
+            response['Content-Type']='application/octet-stream'  
+            response['Content-Disposition']='attachment;filename="test.txt"'  
+            return response
+        except Exception as e:
+            return HttpResponse(e)
+    else:
+        return redirect('/login/')
+    

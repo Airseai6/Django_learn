@@ -30,41 +30,49 @@
     <div class="pg-body">
         <div class="menus">
             <a href="/index/"><i class="fa fa-window-restore" aria-hidden="true"></i> 地图显示</a>
-            <a href="/areacharts/"><i class="fa fa-bar-chart" aria-hidden="true"></i> 地区趋势</a>
-            <a href="/charts/"><i class="fa fa-line-chart" aria-hidden="true"></i> 曲线趋势</a>
-            <a href="#"><i class="fa fa-commenting" aria-hidden="true"></i> 相关消息</a>
-            <p>数据来自腾讯新闻</p>
-            <input id="refresh" class="btn btn-primary" type="button" value="数据刷新" />
+            <!-- <a href="/areacharts/"><i class="fa fa-bar-chart" aria-hidden="true"></i> 地区趋势</a> -->
+            <a href="/charts/"><i class="fa fa-line-chart" aria-hidden="true"></i> 曲线显示</a>
+            <a href="/news/"><i class="fa fa-commenting" aria-hidden="true"></i> 相关消息</a>
+            <a href="https://news.qq.com/zt2020/page/feiyan.htm?from=timeline&isappinstalled=0"><span>数据来自腾讯疫情实时追踪</span></a>
+            <input id="btn_refresh" class="btn btn-primary" type="button" value="数据刷新" />
+            <input id="btn_download" class="btn btn-primary" type="button" value="数据下载" />
         </div>
         <div class="content">
             {% block content %}{% endblock %}
         </div>
     </div>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-boday">
+                    <h4 class="modal-title" align="center">请选择下载内容</h4>
+                    <div style="width: 200px; height: 150px; background: red;">
+                        <a href="/download">下载</a>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
 
-    <script src="/static/jquery-3.4.1.js"></script>
-    <!-- <script>
-        $(function() {
-            $('#refresh').click(function() {
-                $.ajax({
-                    url: '/refresh/',
-                    type: 'POST',
-                    data: {'k':'v',},
-                    success: function (arg) {
-                        if(arg == 'ok'){
-                            location.reload();
-                        }
-                    }
-                })
-            })
+<script src="/static/jquery-3.4.1.js"></script>
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#btn_refresh').click(function() {
+            location.reload();
         })
-    </script> -->
-    <script>
-        $(function() {
-            $('#refresh').click(function() {
-                location.reload();
-            })
+    })
+
+    $(function () {
+        $("#btn_download").click(function () {
+            $('#myModal').modal('show')
         })
-    </script>
-    {% block js %}{% endblock %}
+    })
+</script>
+{% block js %}{% endblock %}
 </body>
 </html>

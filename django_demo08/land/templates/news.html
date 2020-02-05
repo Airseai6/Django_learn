@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+<style type="text/css">
+    #footerbox {
+        margin-top: -32px;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<ul>
+    {% for item in news_list %}
+        <li>{{ item.time }}</li>
+        <li>{{ item.title }}</li>
+        <li>{{ item.desc }}</li>
+        <li>{{ item.source }}</li>
+        <br>
+    {% endfor %}
+</ul>
+
+<nav id="footerbox" aria-label="Page navigation">
+    <ul class="pagination">
+        {{ page_info.pager | safe }}
+    </ul>
+</nav>
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}
