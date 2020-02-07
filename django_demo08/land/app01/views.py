@@ -4,6 +4,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from . import models
 from utils.pager import PageInfo
 from django.http import FileResponse
+import json, time
 
 
 class LoginFrom(Form):
@@ -39,12 +40,10 @@ def logout(request):
 
 # global dataRet
 # dataRet = models.get_data()
-# dataRet.pop('isShowAdd')
 
 
 # def refresh(request):
 #     dataRet = models.get_data()
-#     dataRet.pop('isShowAdd')
 #     return HttpResponse('ok')
 
 
@@ -52,7 +51,7 @@ def index(request):
     username = request.get_signed_cookie('username', default=0, salt='123')
     if username:
         dataRet = models.get_data()
-        dataRet.pop('isShowAdd')
+        # print('index有进来重新加载了一次')
         return render(request, 'index.html', {'username': username, 'dataRet': dataRet},)
     else:
         return redirect('/login/')
@@ -62,7 +61,7 @@ def charts(request):
     username = request.get_signed_cookie('username', default=0, salt='123')
     if username:
         dataRet = models.get_data()
-        dataRet.pop('isShowAdd')
+        # print('charts有进来重新加载了一次')
         return render(request, 'charts.html', {'username': username, 'dataRet': dataRet},)
     else:
         return redirect('/login/')
@@ -84,17 +83,22 @@ def news(request):
     else:
         return redirect('/login/')
 
-
+from django.utils.http import urlquote
 def download(request):
     username = request.get_signed_cookie('username', default=0, salt='123')
     if username:
         try:
-            file=open(r'E:\02_Scripts\Python\Django_learn\django_demo08\land\static\css\commons.css','rb')
-            print(type(file))
-            # response = FileResponse(file)
-            response = FileResponse('123')
+            if request.POST.get('dtype') == '1':
+                dataRet = models.get_data()
+                data = json.dumps(dataRet, ensure_ascii=False)
+                filename = '2019-nCoV疫情数据_' + str(time.strftime("%Y-%m-%d", time.localtime())) + '.json'
+            else:
+                data = json.dumps(newsRet, ensure_ascii=False)
+                filename = '2019-nCoV疫情新闻_' + str(time.strftime("%Y-%m-%d", time.localtime())) + '.json'
+            
+            response = FileResponse(data)
             response['Content-Type']='application/octet-stream'  
-            response['Content-Disposition']='attachment;filename="test.txt"'  
+            response['Content-Disposition']='attachment;filename="{}"'.format(urlquote(filename))
             return response
         except Exception as e:
             return HttpResponse(e)

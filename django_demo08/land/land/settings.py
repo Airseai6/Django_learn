@@ -25,7 +25,7 @@ SECRET_KEY = 'j-wio(7h@ifaj#^vaa%b@gs^e7b+w5((ivxbgy1=k#uexq%x=&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.88.106']
 
 
 # Application definition

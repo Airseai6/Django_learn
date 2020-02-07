@@ -34,7 +34,12 @@ import requests
 def get_data():
     url = 'https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5'
     data = json.loads(requests.get(url=url).json()['data'])
-
+    
+    # data_str = json.dumps(data)
+    # data_str = data_str.replace('True', 'true')
+    # data_str = data_str.replace('False', 'false')
+    # data_dic = json.loads(data_str)
+    
     return data
 
 
