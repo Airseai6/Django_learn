@@ -59,6 +59,7 @@
     var dataRet = {{ dataRet | safe }}
     var True = true;
     var False = false;
+    var None = null;
     var chart01Data = [['product','累计确诊','累计疑似',],]
     for(var i=0;i<dataRet['chinaDayList'].length;i++){
         chart01Data.push([dataRet['chinaDayList'][i]['date'], dataRet['chinaDayList'][i]['confirm'], dataRet['chinaDayList'][i]['suspect'],],);
