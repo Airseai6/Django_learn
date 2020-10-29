@@ -18,6 +18,7 @@
 
 # pyinstaller-F & pycharm
 __pycache__
+.vscode
 build
 dist
 .idea
