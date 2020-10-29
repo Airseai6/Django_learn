@@ -20,7 +20,7 @@ from app01 import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('app01/', include('app01.urls')),
-    path('app02/', include('app02.urls')),
+    path('anl/', include('app02.urls')),
     # path('index/', views.index),
     # re_path(r'^edit/(\w+)/(\w+)/', views.edit),
     # re_path(r'^edit/(?P<a1>\w+)/(?P<a2>\w+)/', views.edit),

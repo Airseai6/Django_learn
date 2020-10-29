@@ -1,9 +1,40 @@
 from django.forms import Form, fields
 from django.shortcuts import render, HttpResponse
+from app01 import models
 
 
 def test(request):
     print('test')
+
+    # from MDSplus import Tree
+    # tree = Tree('exl50_copy', 4118)
+
+    # shotTime = tree.getNode('AI:' + 'G1_IK_F').getTimeInserted().date
+    # data = str(list(tree.getNode('AI:' + 'G1_IK_F').data()))
+
+    # models.tempChannelData.objects.create(
+    #     shot_channel = '4118_M1_PIN',
+    #     shot = '4118',
+    #     channel = 'M1_PIN',
+    #     isHaveData = True,
+    #     xAis = {"len":5002,"start":-5.0,"end":10.003},
+    #     yAis = data,
+    #     yInfo = {"min":5002,"max":-5.0,"unit":"kA"},
+    #     shotTime = shotTime,
+    # )
+
+    data = models.tempChannelData.objects.filter(nid=5)
+    print(type(data[0].yAis))
+    # print(data[0].yAis)
+    print(len(data[0].yAis))
+    temp = data[0].yAis[1:-1].split(', ')
+    print(len(temp))
+    print(temp[0])
+    print(temp[111])
+    print(temp[222])
+    print(temp[-1])
+
+
     return HttpResponse('execute views')
 
 

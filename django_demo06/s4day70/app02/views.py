@@ -66,7 +66,7 @@ def test(request):
 
 def csrf1(request):
     if request.method == 'GET':
-        return render(request, 'csrf1.html')
+        return render(request, '/anl/csrf1.html')
     else:
         return HttpResponse('ok')
 
